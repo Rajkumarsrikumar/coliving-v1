@@ -28,7 +28,7 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export function exportExpensesToExcel(
-  expenses: { date: string; category: string; amount: number; payer?: { name?: string } | null; payment_mode?: string | null; notes?: string | null }[],
+  expenses: { date: string; category: string; amount: number; payer?: { name?: string | null } | null; payment_mode?: string | null; notes?: string | null }[],
   unitName: string,
   currency: string = 'SGD'
 ) {
@@ -70,9 +70,9 @@ export function exportContributionsToExcel(
     reason: string
     amount: number
     status: string
-    requester?: { name?: string } | null
+    requester?: { name?: string | null } | null
     created_at: string
-    payments?: { profile?: { name?: string } | null; amount: number; paid_at: string }[]
+    payments?: { profile?: { name?: string | null } | null; amount: number; paid_at: string }[]
   }[],
   unitName: string,
   currency: string = 'SGD'
@@ -106,8 +106,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: 'Other',
 }
 
-type MemberForReport = { profile?: { name?: string } | null; role: string; contribution_type?: string; share_percentage?: number | null; fixed_amount?: number | null; contribution_period?: string | null; user_id: string }
-type ExpenseForReport = { date: string; category: string; amount: number; paid_by?: string; payer?: { name?: string } | null; payment_mode?: string | null; notes?: string | null }
+type MemberForReport = { profile?: { name?: string | null } | null; role: string; contribution_type?: string; share_percentage?: number | null; fixed_amount?: number | null; contribution_period?: string | null; user_id: string }
+type ExpenseForReport = { date: string; category: string; amount: number; paid_by?: string; payer?: { name?: string | null } | null; payment_mode?: string | null; notes?: string | null }
 
 export function exportUnitReport(params: {
   unitName: string

@@ -11,8 +11,8 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 interface ExportReportModalProps {
   unit: Unit
-  members: (UnitMember & { profile?: { name?: string } })[]
-  expenses: (Expense & { payer?: { name?: string } })[]
+  members: (UnitMember & { profile?: { name?: string | null } })[]
+  expenses: (Expense & { payer?: { name?: string | null } })[]
   onClose: () => void
 }
 

@@ -118,14 +118,8 @@ export function UnitDashboardPage() {
   const lastMonthTotal = lastMonthExpenses.reduce((s, e) => s + e.amount, 0)
   const trend = lastMonthTotal > 0 ? ((thisMonthTotal - lastMonthTotal) / lastMonthTotal) * 100 : 0
 
-  const byCategory = EXPENSE_CATEGORIES.map((c) => ({
-    name: c.label,
-    value: thisMonthExpenses.filter((e) => e.category === c.value).reduce((s, e) => s + e.amount, 0),
-  })).filter((x) => x.value > 0)
-
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   const currentYear = now.getFullYear()
-  const monthlyRent = unit?.monthly_rent ?? 0
 
   function getMonthsInRange(startDate: string, endDate: string): string[] {
     const months: string[] = []
@@ -228,7 +222,7 @@ export function UnitDashboardPage() {
       .reduce((s, p) => s + p.amount, 0)
     const paid = paidFromExpenses + paidFromBalancePayments
     const balance = paid - expected
-    return { member: m, owed: expected, expected, paid, balance }
+    return { member: m, expected, paid, balance }
   })
 
   const balancePaymentsThisMonthTotal = thisMonthBalancePayments.reduce((s, p) => s + p.amount, 0)
@@ -344,7 +338,6 @@ export function UnitDashboardPage() {
       {currentUserMember && (() => {
         const myBalance = balances.find((b) => b.member.user_id === user?.id)
         if (!myBalance) return null
-        const paidFromExpenses = thisMonthExpenses.filter((e) => e.paid_by === user?.id).reduce((s, e) => s + e.amount, 0)
         const paidFromRecorded = thisMonthBalancePayments.filter((p) => p.from_user_id === user?.id).reduce((s, p) => s + p.amount, 0)
         const walletBalance = amountReceived - thisMonthTotal
         return (
