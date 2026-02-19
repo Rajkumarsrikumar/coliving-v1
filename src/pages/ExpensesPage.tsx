@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Filter, Calendar, Download, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { supabase } from '../lib/supabase'
 import { formatCurrency, formatDate } from '../lib/utils'
 import { getCurrencyForCountry } from '../constants/countries'
@@ -22,8 +21,6 @@ export function ExpensesPage() {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null)
   const [monthFilter, setMonthFilter] = useState<number | null>(now.getMonth())
   const [yearFilter, setYearFilter] = useState<number>(now.getFullYear())
-  const [deleteAllConfirm, setDeleteAllConfirm] = useState(false)
-  const [deleteSingleId, setDeleteSingleId] = useState<string | null>(null)
 
   const years = Array.from({ length: 5 }, (_, i) => now.getFullYear() - i)
 
@@ -115,7 +112,11 @@ export function ExpensesPage() {
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => setDeleteAllConfirm(true)}
+            onClick={() => {
+              if (confirm(`Delete all ${filtered.length} expense${filtered.length === 1 ? '' : 's'}? This cannot be undone.`)) {
+                deleteAllMutation.mutate()
+              }
+            }}
             disabled={filtered.length === 0 || deleteAllMutation.isPending}
             className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-950/30"
           >
@@ -255,7 +256,11 @@ export function ExpensesPage() {
                       <span className="shrink-0 font-semibold">{formatCurrency(exp.amount, getCurrencyForCountry(unit?.country))}</span>
                       <button
                         type="button"
-                        onClick={() => setDeleteSingleId(exp.id)}
+                        onClick={() => {
+                          if (confirm('Delete this expense?')) {
+                            deleteMutation.mutate(exp.id)
+                          }
+                        }}
                         className="shrink-0 rounded p-2 text-muted-foreground hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                         disabled={deleteMutation.isPending}
                         aria-label="Delete expense"
@@ -270,32 +275,6 @@ export function ExpensesPage() {
           )}
         </AnimatePresence>
       </div>
-
-      <ConfirmDialog
-        open={deleteAllConfirm}
-        title="Delete all expenses"
-        message={`Delete all ${filtered.length} expense${filtered.length === 1 ? '' : 's'}? This cannot be undone.`}
-        confirmLabel="Delete all"
-        onConfirm={() => {
-          deleteAllMutation.mutate(undefined, { onSuccess: () => setDeleteAllConfirm(false) })
-        }}
-        onCancel={() => setDeleteAllConfirm(false)}
-        isLoading={deleteAllMutation.isPending}
-      />
-
-      <ConfirmDialog
-        open={!!deleteSingleId}
-        title="Delete expense"
-        message="Delete this expense? This cannot be undone."
-        confirmLabel="Delete"
-        onConfirm={() => {
-          if (deleteSingleId) {
-            deleteMutation.mutate(deleteSingleId, { onSuccess: () => setDeleteSingleId(null) })
-          }
-        }}
-        onCancel={() => setDeleteSingleId(null)}
-        isLoading={deleteMutation.isPending}
-      />
     </div>
   )
 }

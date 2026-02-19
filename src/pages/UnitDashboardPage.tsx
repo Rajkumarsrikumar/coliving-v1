@@ -15,7 +15,6 @@ import {
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { ConfirmDialog } from '../components/ui/ConfirmDialog'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { formatCurrency, formatDate, formatMemberContribution, formatDueDate, getExpectedAmount, getNextDueDate } from '../lib/utils'
@@ -218,7 +217,6 @@ export function UnitDashboardPage() {
   const [showExportModal, setShowExportModal] = useState(false)
   const [showRecordPaymentModal, setShowRecordPaymentModal] = useState(false)
   const [deletingPaymentId, setDeletingPaymentId] = useState<string | null>(null)
-  const [deletePaymentConfirmId, setDeletePaymentConfirmId] = useState<string | null>(null)
 
   const balances = members.map((m) => {
     const expected = getExpectedAmount(m, members, totalForExpected, unit?.monthly_rent ?? 0)
@@ -397,6 +395,19 @@ export function UnitDashboardPage() {
           })
         if (myPayments.length === 0) return null
         const formatMonth = (d: string) => new Date(d).toLocaleDateString('en', { month: 'short', year: 'numeric' })
+        const handleDeletePayment = async (paymentId: string) => {
+          setDeletingPaymentId(paymentId)
+          try {
+            const { error } = await supabase.from('balance_payments').delete().eq('id', paymentId)
+            if (error) throw error
+            queryClient.invalidateQueries({ queryKey: ['balance-payments', id] })
+          } catch (err) {
+            console.error('Delete payment failed:', err)
+            alert((err as Error).message || 'Failed to delete payment')
+          } finally {
+            setDeletingPaymentId(null)
+          }
+        }
         return (
           <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <Card>
@@ -434,7 +445,7 @@ export function UnitDashboardPage() {
                           {isMasterTenant && (
                             <button
                               type="button"
-                              onClick={() => setDeletePaymentConfirmId(p.id)}
+                              onClick={() => handleDeletePayment(p.id)}
                               disabled={deletingPaymentId === p.id}
                               className="ml-auto rounded p-1.5 text-red-600 hover:bg-red-50 disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-950/50"
                               aria-label="Delete payment"
@@ -456,32 +467,6 @@ export function UnitDashboardPage() {
           </motion.div>
         )
       })()}
-
-      {deletePaymentConfirmId && (
-        <ConfirmDialog
-          open={!!deletePaymentConfirmId}
-          title="Delete payment"
-          message="Delete this payment record? This cannot be undone."
-          confirmLabel="Delete"
-          onConfirm={async () => {
-            if (!deletePaymentConfirmId) return
-            setDeletingPaymentId(deletePaymentConfirmId)
-            try {
-              const { error } = await supabase.from('balance_payments').delete().eq('id', deletePaymentConfirmId)
-              if (error) throw error
-              queryClient.invalidateQueries({ queryKey: ['balance-payments', id] })
-              setDeletePaymentConfirmId(null)
-            } catch (err) {
-              console.error('Delete payment failed:', err)
-              alert((err as Error).message || 'Failed to delete payment')
-            } finally {
-              setDeletingPaymentId(null)
-            }
-          }}
-          onCancel={() => setDeletePaymentConfirmId(null)}
-          isLoading={deletingPaymentId === deletePaymentConfirmId}
-        />
-      )}
 
       {/* Hero */}
       <motion.div
@@ -557,50 +542,33 @@ export function UnitDashboardPage() {
               </CardTitle>
               <p className="text-sm text-muted-foreground">Expected amount, paid, and balance per member</p>
             </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[320px] text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-200 dark:border-slate-700">
-                      <th className="pb-2 pr-4 text-left font-medium text-muted-foreground">Member</th>
-                      <th className="pb-2 pr-4 text-right font-medium text-muted-foreground">Expected</th>
-                      <th className="pb-2 pr-4 text-right font-medium text-muted-foreground">Paid</th>
-                      <th className="pb-2 text-right font-medium text-muted-foreground">Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {balances.map(({ member, expected, paid, balance }) => (
-                      <tr key={member.id} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
-                        <td className="py-3 pr-4">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
-                              {(member.profile?.name || '?')[0]}
-                            </div>
-                            <div>
-                              <p className="font-medium">{member.profile?.name || 'Unknown'}</p>
-                              <p className="text-xs text-muted-foreground">{formatMemberContribution(member)}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3 pr-4 text-right font-medium text-foreground">
-                          {formatCurrency(expected, currency)}
-                        </td>
-                        <td className="py-3 pr-4 text-right font-medium text-foreground">
-                          {formatCurrency(paid, currency)}
-                        </td>
-                        <td
-                          className={`py-3 text-right font-semibold ${
-                            balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
-                          }`}
-                        >
-                          {balance > 0 ? '+' : ''}
-                          {formatCurrency(balance, currency)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <CardContent className="space-y-3">
+              {balances.map(({ member, owed, expected, paid, balance }) => (
+                <div
+                  key={member.id}
+                  className="flex flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                      {(member.profile?.name || '?')[0]}
+                    </div>
+                    <div>
+                      <p className="font-medium">{member.profile?.name || 'Unknown'}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Expected {formatCurrency(expected, currency)} · Paid {formatCurrency(paid, currency)} · {formatMemberContribution(member)}
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className={`font-semibold ${
+                      balance > 0 ? 'text-green-600' : balance < 0 ? 'text-amber-600' : 'text-muted-foreground'
+                    }`}
+                  >
+                    {balance > 0 ? '+' : ''}
+                    {formatCurrency(balance, currency)}
+                  </span>
+                </div>
+              ))}
             </CardContent>
           </Card>
         </motion.div>

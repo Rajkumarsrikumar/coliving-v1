@@ -6,6 +6,7 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { getCurrencySymbol } from '../constants/countries'
+import { PAYMENT_MODES } from '../types'
 
 function escapeCsvValue(val: string | number | null | undefined): string {
   if (val === null || val === undefined) return ''
@@ -285,17 +286,8 @@ export function exportUnitReportPDF(params: {
   })
   y = (doc as any).lastAutoTable.finalY + 10
 
-  const paymentLabels: Record<string, string> = {
-    bank_transfer: 'Bank transfer',
-    paynow: 'PayNow',
-    cash: 'Cash',
-    credit_card: 'Credit card',
-    grabpay: 'GrabPay',
-    paylah: 'PayLah!',
-    other: 'Other',
-  }
   const paymentLabel = (mode: string | null | undefined) =>
-    mode ? (paymentLabels[mode] || mode) : ''
+    mode ? (PAYMENT_MODES.find((m) => m.value === mode)?.label || mode) : ''
   const expenseRows = monthExpenses
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((e) => [

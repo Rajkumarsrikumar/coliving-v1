@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Calendar, Plus, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
-import { ConfirmDialog } from '../../components/ui/ConfirmDialog'
 import { Input } from '../../components/ui/Input'
 import { Label } from '../../components/ui/Label'
 import { supabase } from '../../lib/supabase'
@@ -30,7 +29,6 @@ export function PaymentSettingsCard({ unitId, paymentDueDay }: PaymentSettingsCa
   const queryClient = useQueryClient()
   const [customName, setCustomName] = useState('')
   const [customDueDay, setCustomDueDay] = useState(1)
-  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; label: string } | null>(null)
 
   const { data: categoryDueList = [] } = useQuery({
     queryKey: ['category-payment-due', unitId],
@@ -134,7 +132,7 @@ export function PaymentSettingsCard({ unitId, paymentDueDay }: PaymentSettingsCa
                       if (v) {
                         upsertCategoryDueMutation.mutate({ category: cat.value, dueDay: parseInt(v, 10) })
                       } else if (existing) {
-                        setDeleteConfirm({ id: existing.id, label: cat.label })
+                        deleteCategoryDueMutation.mutate(existing.id)
                       }
                     }}
                     className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-foreground"
@@ -163,7 +161,7 @@ export function PaymentSettingsCard({ unitId, paymentDueDay }: PaymentSettingsCa
                 <span className="text-sm text-muted-foreground">{formatDueDate(c.due_day)}</span>
                 <button
                   type="button"
-                  onClick={() => setDeleteConfirm({ id: c.id, label: c.category })}
+                  onClick={() => deleteCategoryDueMutation.mutate(c.id)}
                   className="rounded p-1 text-muted-foreground hover:bg-slate-100 hover:text-red-600 dark:hover:bg-slate-800"
                   aria-label="Remove"
                 >
@@ -237,22 +235,6 @@ export function PaymentSettingsCard({ unitId, paymentDueDay }: PaymentSettingsCa
           )}
         </div>
       </CardContent>
-
-      {deleteConfirm && (
-        <ConfirmDialog
-          open={!!deleteConfirm}
-          title="Remove due date"
-          message={`Remove the due date for "${deleteConfirm.label}"?`}
-          confirmLabel="Remove"
-          onConfirm={() => {
-            deleteCategoryDueMutation.mutate(deleteConfirm.id, {
-              onSuccess: () => setDeleteConfirm(null),
-            })
-          }}
-          onCancel={() => setDeleteConfirm(null)}
-          isLoading={deleteCategoryDueMutation.isPending}
-        />
-      )}
     </Card>
   )
 }

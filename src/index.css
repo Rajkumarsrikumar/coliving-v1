@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 98%;
+    --card-foreground: 222 47% 11%;
+    --primary: 4 90% 58%;
+    --primary-foreground: 0 0% 100%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --border: 214 32% 91%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 4 90% 58%;
+    --primary-foreground: 0 0% 100%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --border: 217 33% 17%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  /* Recharts legend: smaller text and icons */
+  .recharts-legend-item {
+    font-size: 10px;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  /* Date input: visible in dark mode, picker icon at end */
+  input[type="date"] {
+    padding-right: 2.5rem;
+    min-width: 0;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    margin-left: 0;
+    opacity: 0.7;
+  }
+
+  /* Dark mode: make date input text and icon visible (Contract dates, Add expense, etc.) */
+  .dark input[type="date"] {
+    color-scheme: dark;
+    color: hsl(210 40% 98%) !important;
+    -webkit-text-fill-color: hsl(210 40% 98%) !important;
+  }
+
+  .dark input[type="date"]::-webkit-datetime-edit,
+  .dark input[type="date"]::-webkit-datetime-edit-text,
+  .dark input[type="date"]::-webkit-datetime-edit-month-field,
+  .dark input[type="date"]::-webkit-datetime-edit-day-field,
+  .dark input[type="date"]::-webkit-datetime-edit-year-field {
+    color: hsl(210 40% 98%) !important;
+    -webkit-text-fill-color: hsl(210 40% 98%) !important;
+    opacity: 1 !important;
+  }
+
+  /* Placeholder/empty state */
+  .dark input[type="date"]:invalid::-webkit-datetime-edit {
+    color: hsl(215 20% 65%) !important;
+    -webkit-text-fill-color: hsl(215 20% 65%) !important;
+  }
+
+  /* Calendar icon: visible in dark mode - custom light icon via mask */
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #e2e8f0;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z'/%3E%3C/svg%3E");
+    mask-size: 20px 20px;
+    -webkit-mask-size: 20px 20px;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
+    opacity: 1 !important;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+  }
+}
