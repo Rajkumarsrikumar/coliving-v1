@@ -1,0 +1,68 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: 'class',
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: 'hsl(var(--card))',
+        'card-foreground': 'hsl(var(--card-foreground))',
+        primary: 'hsl(var(--primary))',
+        muted: 'hsl(var(--muted))',
+        'muted-foreground': 'hsl(var(--muted-foreground))',
+        border: 'hsl(var(--border))',
+        coral: {
+          50: '#fff5f3',
+          100: '#ffe8e4',
+          200: '#ffd5ce',
+          300: '#ffb4a8',
+          400: '#fd8575',
+          500: '#f55d4a',
+          600: '#e23f2c',
+          700: '#bf3020',
+          800: '#9f2a1e',
+          900: '#842a21',
+        },
+        sage: {
+          50: '#f4f6f4',
+          100: '#e6ebe6',
+          200: '#d1dbd1',
+          300: '#aec2ae',
+          400: '#84a284',
+          500: '#628562',
+          600: '#4d6b4d',
+          700: '#3f563f',
+          800: '#354635',
+          900: '#2d3b2d',
+        },
+        teal: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+        },
+      },
+      fontFamily: {
+        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        xl: '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
+      },
+      boxShadow: {
+        soft: '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+        glow: '0 0 20px -5px rgba(245, 93, 74, 0.3)',
+      },
+    },
+  },
+  plugins: [],
+}
