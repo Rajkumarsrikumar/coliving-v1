@@ -9,7 +9,7 @@ import { InviteMemberForm } from '../features/units/InviteMemberForm'
 import { EditMemberModal } from '../features/units/EditMemberModal'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
-import { formatCurrency, formatDate, formatDueDate, formatMemberContribution, getNextDueDate } from '../lib/utils'
+import { formatDate, formatDueDate, formatMemberContribution, getNextDueDate } from '../lib/utils'
 import { getCurrencyForCountry } from '../constants/countries'
 import type { UnitMember, Profile } from '../types'
 

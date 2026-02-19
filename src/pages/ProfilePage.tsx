@@ -84,9 +84,9 @@ export function ProfilePage() {
       }
 
       const { error: updateErr } = await updateProfile({
-        name: name.trim() || null,
-        avatar_url: avatarUrl,
-        phone: phone.trim() || null,
+        name: name.trim() || undefined,
+        avatar_url: avatarUrl ?? undefined,
+        phone: phone.trim() || undefined,
       })
       if (updateErr) throw updateErr
       setSuccess(true)

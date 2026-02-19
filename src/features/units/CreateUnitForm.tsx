@@ -181,11 +181,6 @@ export function CreateUnitForm() {
     }
   }
 
-  const clearContract = () => {
-    setContractFile(null)
-    if (contractInputRef.current) contractInputRef.current.value = ''
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     mutation.mutate()

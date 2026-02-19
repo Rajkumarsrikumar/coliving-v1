@@ -35,11 +35,11 @@ export function EditMemberModal({ member, unitId, currency = 'SGD', onClose }: E
       const fixed = contributionType === 'fixed' ? parseFloat(fixedAmount) || 0 : null
 
       if (contributionType === 'share') {
-        if (share < 0 || share > 100) {
+        if (share !== null && (share < 0 || share > 100)) {
           throw new Error('Share must be between 0 and 100')
         }
       } else {
-        if (fixed < 0) {
+        if (fixed !== null && fixed < 0) {
           throw new Error('Fixed amount must be 0 or more')
         }
       }

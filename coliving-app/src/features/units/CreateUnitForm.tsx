@@ -181,7 +181,7 @@ export function CreateUnitForm() {
     }
   }
 
-  const clearContract = () => {
+  const _clearContract = () => {
     setContractFile(null)
     if (contractInputRef.current) contractInputRef.current.value = ''
   }

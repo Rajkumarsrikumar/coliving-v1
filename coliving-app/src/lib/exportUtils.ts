@@ -121,7 +121,7 @@ export function exportUnitReport(params: {
   getMemberShare: (m: MemberForReport, members: MemberForReport[], rent: number) => number
   getExpectedAmount: (m: MemberForReport, members: MemberForReport[], total: number, rent: number) => number
 }) {
-  const { unitName, month, year, expenses, members, allMembers, monthlyRent, currency = 'SGD', getMemberShare, getExpectedAmount } = params
+  const { unitName, month, year, expenses, members, allMembers, monthlyRent, currency = 'SGD', getExpectedAmount } = params
   const monthStart = `${year}-${String(month).padStart(2, '0')}-01`
   const monthEnd = new Date(year, month, 0).toISOString().slice(0, 10)
   const monthExpenses = expenses.filter((e) => e.date >= monthStart && e.date <= monthEnd)
@@ -153,7 +153,6 @@ export function exportUnitReport(params: {
   const sym = getCurrencySymbol(currency)
   lines.push(`Name,Role,Contribution,Expected (${sym}),Paid (${sym}),Balance (${sym})`)
   members.forEach((m) => {
-    const share = getMemberShare(m, allMembers, monthlyRent)
     const expected = getExpectedAmount(m, allMembers, totalExpenses, monthlyRent)
     const paid = monthExpenses.filter((e) => e.paid_by === m.user_id).reduce((s, e) => s + e.amount, 0)
     const balance = paid - expected
@@ -207,7 +206,7 @@ export function exportUnitReportPDF(params: {
   getMemberShare: (m: MemberForReport, members: MemberForReport[], rent: number) => number
   getExpectedAmount: (m: MemberForReport, members: MemberForReport[], total: number, rent: number) => number
 }) {
-  const { unitName, month, year, expenses, members, allMembers, monthlyRent, currency = 'SGD', getMemberShare, getExpectedAmount } = params
+  const { unitName, month, year, expenses, members, allMembers, monthlyRent, currency = 'SGD', getExpectedAmount } = params
   const monthStart = `${year}-${String(month).padStart(2, '0')}-01`
   const monthEnd = new Date(year, month, 0).toISOString().slice(0, 10)
   const monthExpenses = expenses.filter((e) => e.date >= monthStart && e.date <= monthEnd)
@@ -222,7 +221,6 @@ export function exportUnitReportPDF(params: {
   const monthLabel = MONTH_NAMES[month - 1]
 
   const doc = new jsPDF({ format: 'a4', unit: 'mm' })
-  const pageWidth = doc.internal.pageSize.getWidth()
   let y = 18
 
   // Coliving header: icon + text + report name
@@ -258,7 +256,6 @@ export function exportUnitReportPDF(params: {
   y = (doc as any).lastAutoTable.finalY + 10
 
   const memberRows = members.map((m) => {
-    const share = getMemberShare(m, allMembers, monthlyRent)
     const expected = getExpectedAmount(m, allMembers, totalExpenses, monthlyRent)
     const paid = monthExpenses.filter((e) => e.paid_by === m.user_id).reduce((s, e) => s + e.amount, 0)
     const balance = paid - expected

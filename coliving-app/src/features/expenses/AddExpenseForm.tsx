@@ -11,7 +11,7 @@ import { Label } from '../../components/ui/Label'
 import { supabase } from '../../lib/supabase'
 import { getCurrencyForCountry, getCurrencySymbol } from '../../constants/countries'
 import { EXPENSE_CATEGORIES, PAYMENT_MODES } from '../../types'
-import type { ExpenseCategory, PaymentMode } from '../../types'
+import type { ExpenseCategory } from '../../types'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_SIZE_MB = 5
