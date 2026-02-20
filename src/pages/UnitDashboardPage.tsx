@@ -342,33 +342,40 @@ export function UnitDashboardPage() {
           <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <Card className="overflow-hidden border-2 border-slate-200 dark:border-slate-700">
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Wallet className="h-5 w-5 text-coral-500" />
-                    My wallet
-                  </CardTitle>
-                </div>
-                <p className="text-sm text-muted-foreground">Your paid contribution this month</p>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Wallet className="h-5 w-5 shrink-0 text-coral-500" />
+                  My wallet
+                </CardTitle>
+                <p className="hidden text-sm text-muted-foreground sm:block">Your paid contribution this month</p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-baseline justify-between">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
                   <span className="text-2xl font-bold">{formatCurrency(myBalance.paid, currency)}</span>
                   <span className={`text-sm font-medium ${walletBalance >= 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
                     Balance: {walletBalance >= 0 ? '+' : ''}{formatCurrency(walletBalance, currency)}
                   </span>
                 </div>
-                <div className="space-y-1.5 rounded-lg bg-muted/50 px-3 py-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Amount received in master account</span>
-                    <span>{formatCurrency(amountReceived, currency)}</span>
+                <div className="space-y-3 rounded-lg bg-muted/50 px-3 py-3 text-sm sm:space-y-1.5 sm:py-2">
+                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-2">
+                    <span className="text-muted-foreground sm:min-w-0">
+                      <span className="sm:hidden">Received</span>
+                      <span className="hidden sm:inline">Amount received in master account</span>
+                    </span>
+                    <span className="font-medium tabular-nums sm:shrink-0">{formatCurrency(amountReceived, currency)}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Expenses paid (actuals paid)</span>
-                    <span>{formatCurrency(thisMonthTotal, currency)}</span>
+                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-2">
+                    <span className="text-muted-foreground sm:min-w-0">
+                      <span className="sm:hidden">Expenses paid</span>
+                      <span className="hidden sm:inline">Expenses paid (actuals paid)</span>
+                    </span>
+                    <span className="font-medium tabular-nums sm:shrink-0">{formatCurrency(thisMonthTotal, currency)}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total amount paid (Myself)</span>
-                    <span>{formatCurrency(paidFromRecorded, currency)}</span>
+                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-2">
+                    <span className="text-muted-foreground sm:min-w-0">
+                      <span className="sm:hidden">Recorded</span>
+                      <span className="hidden sm:inline">Total amount paid (Myself)</span>
+                    </span>
+                    <span className="font-medium tabular-nums sm:shrink-0">{formatCurrency(paidFromRecorded, currency)}</span>
                   </div>
                 </div>
               </CardContent>
@@ -533,33 +540,40 @@ export function UnitDashboardPage() {
                 <Users className="h-5 w-5" />
                 Balances
               </CardTitle>
-              <p className="text-sm text-muted-foreground">Expected amount, paid, and balance per member</p>
+              <p className="hidden text-sm text-muted-foreground sm:block">Expected amount, paid, and balance per member</p>
             </CardHeader>
             <CardContent className="space-y-3">
               {balances.map(({ member, expected, paid, balance }) => (
                 <div
                   key={member.id}
-                  className="flex flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
+                  className="rounded-lg border p-3"
                 >
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
                       {(member.profile?.name || '?')[0]}
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium">{member.profile?.name || 'Unknown'}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Expected {formatCurrency(expected, currency)} · Paid {formatCurrency(paid, currency)} · {formatMemberContribution(member)}
+                      <p className="text-xs text-muted-foreground sm:hidden">{formatMemberContribution(member, currency, { short: true })}</p>
+                      <p className="hidden text-xs text-muted-foreground sm:block">
+                        Expected {formatCurrency(expected, currency)} · Paid {formatCurrency(paid, currency)} · {formatMemberContribution(member, currency)}
                       </p>
                     </div>
+                    <span
+                      className={`shrink-0 font-semibold tabular-nums ${
+                        balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
+                      }`}
+                    >
+                      {balance > 0 ? '+' : ''}
+                      {formatCurrency(balance, currency)}
+                    </span>
                   </div>
-                  <span
-                    className={`font-semibold ${
-                      balance > 0 ? 'text-green-600' : balance < 0 ? 'text-amber-600' : 'text-muted-foreground'
-                    }`}
-                  >
-                    {balance > 0 ? '+' : ''}
-                    {formatCurrency(balance, currency)}
-                  </span>
+                  <div className="mt-2 flex justify-between gap-2 border-t border-slate-100 pt-2 text-xs sm:hidden dark:border-slate-800">
+                    <span className="text-muted-foreground">Exp</span>
+                    <span className="font-medium tabular-nums">{formatCurrency(expected, currency)}</span>
+                    <span className="text-muted-foreground">Paid</span>
+                    <span className="font-medium tabular-nums">{formatCurrency(paid, currency)}</span>
+                  </div>
                 </div>
               ))}
             </CardContent>
@@ -679,16 +693,16 @@ export function UnitDashboardPage() {
       {/* Recent expenses */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
+          <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <CardTitle>Recent expenses</CardTitle>
-            <div className="flex flex-wrap gap-2">
-              <Link to={`/units/${id}/members`}>
+            <div className="flex flex-wrap gap-1 sm:gap-2">
+              <Link to={`/units/${id}/members`} className="hidden sm:block">
                 <Button variant="ghost" size="sm">Members</Button>
               </Link>
               <Link to={`/units/${id}/expenses`}>
                 <Button variant="ghost" size="sm">View all</Button>
               </Link>
-              <Link to={`/units/${id}/contributions`}>
+              <Link to={`/units/${id}/contributions`} className="hidden sm:block">
                 <Button variant="ghost" size="sm">Contributions</Button>
               </Link>
             </div>
@@ -701,24 +715,39 @@ export function UnitDashboardPage() {
                   return (
                     <div
                       key={exp.id}
-                      className="flex min-w-0 items-center justify-between gap-3 rounded-lg border p-3"
+                      className="flex min-w-0 flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                     >
                       <div className="flex min-w-0 flex-1 items-center gap-3">
                         <div className={`h-2 w-2 shrink-0 rounded-full ${cat?.color || 'bg-gray-500'}`} />
-                        <div className="min-w-0">
-                          <p className="font-medium">{cat?.label || exp.category}</p>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2 sm:block">
+                            <p className="font-medium">{cat?.label || exp.category}</p>
+                            <div className="flex shrink-0 items-center gap-2">
+                              {exp.receipt_url && (
+                                <a href={exp.receipt_url} target="_blank" rel="noopener noreferrer" className="sm:hidden">
+                                  <img src={exp.receipt_url} alt="Receipt" className="h-8 w-8 rounded border object-cover" />
+                                </a>
+                              )}
+                              <span className="font-medium tabular-nums sm:hidden">{formatCurrency(exp.amount, currency)}</span>
+                            </div>
+                          </div>
                           <p className="text-xs text-muted-foreground">
-                            {formatDate(exp.date)} · {exp.payer?.name || 'Unknown'}
-                            {exp.payment_mode && ` · ${PAYMENT_MODES.find((m) => m.value === exp.payment_mode)?.label || exp.payment_mode}`}
+                            <span className="sm:hidden">{formatDate(exp.date)} · {exp.payer?.name || 'Unknown'}</span>
+                            <span className="hidden sm:inline">
+                              {formatDate(exp.date)} · {exp.payer?.name || 'Unknown'}
+                              {exp.payment_mode && ` · ${PAYMENT_MODES.find((m) => m.value === exp.payment_mode)?.label || exp.payment_mode}`}
+                            </span>
                           </p>
                         </div>
                       </div>
-                      {exp.receipt_url && (
-                        <a href={exp.receipt_url} target="_blank" rel="noopener noreferrer" className="shrink-0">
-                          <img src={exp.receipt_url} alt="Receipt" className="h-10 w-10 rounded border object-cover" />
-                        </a>
-                      )}
-                      <span className="shrink-0 font-medium">{formatCurrency(exp.amount, currency)}</span>
+                      <div className="flex shrink-0 items-center justify-end gap-2">
+                        {exp.receipt_url && (
+                          <a href={exp.receipt_url} target="_blank" rel="noopener noreferrer" className="hidden sm:block">
+                            <img src={exp.receipt_url} alt="Receipt" className="h-10 w-10 rounded border object-cover" />
+                          </a>
+                        )}
+                        <span className="hidden font-medium tabular-nums sm:block">{formatCurrency(exp.amount, currency)}</span>
+                      </div>
                     </div>
                   )
                 })}

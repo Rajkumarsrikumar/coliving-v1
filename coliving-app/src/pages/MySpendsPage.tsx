@@ -133,7 +133,7 @@ export function MySpendsPage() {
           <Wallet className="h-7 w-7 text-coral-500" />
           My overall spends
         </h1>
-        <p className="mt-1 text-muted-foreground">Your spending across all coliving units</p>
+        <p className="mt-1 hidden text-muted-foreground sm:block">Your spending across all coliving units</p>
       </div>
 
       {memberships.length === 0 ? (
@@ -150,16 +150,23 @@ export function MySpendsPage() {
         <div className="space-y-6">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="overflow-hidden bg-gradient-to-br from-coral-500 to-coral-600 text-white">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <p className="text-sm opacity-90">Total you&apos;ve paid (all time)</p>
-                <p className="mt-1 text-2xl font-bold">{formatCurrency(totalPaid, primaryCurrency)}</p>
-                <p className="mt-2 text-sm opacity-90">
-                  Your share: {formatCurrency(totalOwed, primaryCurrency)} · Balance: {formatCurrency(totalBalance, primaryCurrency)}
-                  {totalBalance > 0 && ' (you\'re owed)'}
-                  {totalBalance < 0 && ' (you owe)'}
-                </p>
+                <p className="mt-1 text-2xl font-bold tabular-nums">{formatCurrency(totalPaid, primaryCurrency)}</p>
+                <div className="mt-3 text-sm opacity-90 sm:mt-2">
+                  <div className="flex flex-col gap-0.5 sm:block">
+                    <span>Share {formatCurrency(totalOwed, primaryCurrency)}</span>
+                    <span className="hidden sm:inline"> · </span>
+                    <span>
+                      Balance {formatCurrency(totalBalance, primaryCurrency)}
+                      {(totalBalance > 0 || totalBalance < 0) && (
+                        <> {totalBalance > 0 ? '(you\'re owed)' : '(you owe)'}</>
+                      )}
+                    </span>
+                  </div>
+                </div>
                 {hasMultipleCurrencies && (
-                  <p className="mt-1 text-xs opacity-75">Aggregate uses {primaryCurrency}. Per-unit amounts use each unit&apos;s currency.</p>
+                  <p className="mt-2 text-xs opacity-75 sm:mt-1">Aggregate uses {primaryCurrency}. Per-unit amounts use each unit&apos;s currency.</p>
                 )}
               </CardContent>
             </Card>
@@ -174,18 +181,18 @@ export function MySpendsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-6">
+                <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:gap-6">
                   <div>
-                    <p className="text-sm text-muted-foreground">You paid</p>
-                    <p className="text-lg font-semibold">{formatCurrency(thisMonthPaid, primaryCurrency)}</p>
+                    <p className="text-xs text-muted-foreground sm:text-sm">Paid</p>
+                    <p className="text-base font-semibold tabular-nums sm:text-lg">{formatCurrency(thisMonthPaid, primaryCurrency)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Your share</p>
-                    <p className="text-lg font-semibold">{formatCurrency(thisMonthOwed, primaryCurrency)}</p>
+                    <p className="text-xs text-muted-foreground sm:text-sm">Share</p>
+                    <p className="text-base font-semibold tabular-nums sm:text-lg">{formatCurrency(thisMonthOwed, primaryCurrency)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className={`text-lg font-semibold ${thisMonthPaid - thisMonthOwed >= 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                    <p className="text-xs text-muted-foreground sm:text-sm">Balance</p>
+                    <p className={`text-base font-semibold tabular-nums sm:text-lg ${thisMonthPaid - thisMonthOwed >= 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
                       {formatCurrency(thisMonthPaid - thisMonthOwed, primaryCurrency)}
                     </p>
                   </div>
@@ -206,19 +213,24 @@ export function MySpendsPage() {
                 <div className="space-y-3">
                   {summary.map((s) => (
                     <Link key={s.unit.id} to={`/units/${s.unit.id}`}>
-                      <div className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50">
-                        <div>
+                      <div className="flex items-start justify-between gap-3 rounded-lg border p-3 transition-colors hover:bg-slate-50 sm:items-center sm:p-4 dark:hover:bg-slate-900/50">
+                        <div className="min-w-0 flex-1">
                           <p className="font-medium">{s.unit.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Paid {formatCurrency(s.myPaid, getCurrencyForCountry(s.unit.country))} · Share {formatCurrency(s.myOwed, getCurrencyForCountry(s.unit.country))}
+                          <div className="mt-1.5 flex flex-col gap-0.5 text-sm text-muted-foreground sm:mt-1 sm:block">
+                            <span>Paid {formatCurrency(s.myPaid, getCurrencyForCountry(s.unit.country))}</span>
+                            <span className="hidden sm:inline"> · </span>
+                            <span>Share {formatCurrency(s.myOwed, getCurrencyForCountry(s.unit.country))}</span>
                             {s.balance !== 0 && (
-                              <span className={s.balance > 0 ? ' text-green-600 dark:text-green-400' : ' text-amber-600 dark:text-amber-400'}>
-                                {' '}· {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), getCurrencyForCountry(s.unit.country))}
-                              </span>
+                              <>
+                                <span className="hidden sm:inline"> · </span>
+                                <span className={`block sm:inline ${s.balance > 0 ? 'font-medium text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                                  {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), getCurrencyForCountry(s.unit.country))}
+                                </span>
+                              </>
                             )}
-                          </p>
+                          </div>
                         </div>
-                        <span className="text-coral-500">→</span>
+                        <span className="shrink-0 text-coral-500">→</span>
                       </div>
                     </Link>
                   ))}

@@ -58,7 +58,7 @@ export function UnitMembersPage() {
 
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground">{unit?.name} – Members</h1>
-        <p className="text-muted-foreground">Master tenant adds co-tenants. Set share % or fixed amount (monthly/yearly).</p>
+        <p className="hidden text-muted-foreground sm:block">Master tenant adds co-tenants. Set share % or fixed amount (monthly/yearly).</p>
       </div>
 
       {/* Payment reminder (co-tenants only) */}
@@ -89,35 +89,43 @@ export function UnitMembersPage() {
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-center justify-between rounded-lg border p-3"
+                    className="flex items-start gap-3 rounded-lg border p-3 sm:items-center"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
-                        {(member.profile?.name || '?')[0]}
-                      </div>
-                      <div>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                      {(member.profile?.name || '?')[0]}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
                         <p className="font-medium">
                           {member.profile?.name || 'Unknown'}
                           {member.user_id === user?.id && (
-                            <span className="ml-2 text-xs text-muted-foreground">(you)</span>
+                            <span className="ml-1.5 text-xs text-muted-foreground">(you)</span>
                           )}
                         </p>
-                        <p className="flex items-center gap-1 text-sm text-muted-foreground">
-                          {(member.role === 'master_tenant' || member.role === 'owner') && <Crown className="h-3.5 w-3.5" />}
-                          {member.role === 'master_tenant' || member.role === 'owner' ? 'Master tenant' : 'Co-tenant'} · {formatMemberContribution(member, getCurrencyForCountry(unit?.country))}
-                        </p>
+                        {isMasterTenant && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="shrink-0"
+                            onClick={() => setEditingMember(member)}
+                            aria-label="Edit contribution"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          {(member.role === 'master_tenant' || member.role === 'owner') && <Crown className="h-3.5 w-3.5 shrink-0" />}
+                          {member.role === 'master_tenant' || member.role === 'owner' ? 'Master tenant' : 'Co-tenant'}
+                        </span>
+                        <span className="hidden text-slate-300 dark:text-slate-600 sm:inline">·</span>
+                        <span className="tabular-nums">
+                          <span className="sm:hidden">{formatMemberContribution(member, getCurrencyForCountry(unit?.country), { short: true })}</span>
+                          <span className="hidden sm:inline">{formatMemberContribution(member, getCurrencyForCountry(unit?.country))}</span>
+                        </span>
                       </div>
                     </div>
-                    {isMasterTenant && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setEditingMember(member)}
-                        aria-label="Edit contribution"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                    )}
                   </div>
                 ))}
               </div>

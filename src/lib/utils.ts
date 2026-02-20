@@ -86,17 +86,18 @@ export function formatMemberContribution(
     contribution_period?: string | null
     contribution_end_date?: string | null
   },
-  currency: string = 'SGD'
+  currency: string = 'SGD',
+  options?: { short?: boolean }
 ): string {
   const type = member.contribution_type || 'share'
   let base: string
   if (type === 'share') {
-    base = `${member.share_percentage ?? 0}% share`
+    base = `${member.share_percentage ?? 0}%`
   } else {
     const period = member.contribution_period || 'monthly'
     base = `${formatCurrency(member.fixed_amount ?? 0, currency)}/${period === 'yearly' ? 'yr' : 'mo'}`
   }
-  if (member.contribution_end_date) {
+  if (!options?.short && member.contribution_end_date) {
     return `${base} until ${formatDate(member.contribution_end_date)}`
   }
   return base
