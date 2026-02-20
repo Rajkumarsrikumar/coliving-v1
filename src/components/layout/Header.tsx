@@ -37,7 +37,7 @@ export function Header({ className }: HeaderProps) {
         className="flex min-w-0 shrink items-center gap-2 font-display text-lg font-bold tracking-tight text-coral-500 transition-colors hover:text-coral-600"
       >
         <Home className="h-6 w-6" />
-        COTENANTY
+        CoTenanty
       </Link>
       <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
         <Link

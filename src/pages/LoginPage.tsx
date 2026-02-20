@@ -39,7 +39,7 @@ export function LoginPage() {
             <div className="rounded-2xl bg-coral-500 p-3">
               <Home className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-coral-500">COTENANTY</h1>
+            <h1 className="text-2xl font-bold text-coral-500">CoTenanty</h1>
             <p className="text-sm text-muted-foreground">Split expenses, share life</p>
           </div>
           <Card className="border-0 shadow-xl bg-card">

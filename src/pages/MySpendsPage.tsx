@@ -133,7 +133,7 @@ export function MySpendsPage() {
           <Wallet className="h-7 w-7 text-coral-500" />
           My overall spends
         </h1>
-        <p className="mt-1 hidden text-muted-foreground sm:block">Your spending across all COTENANTY units</p>
+        <p className="mt-1 hidden text-muted-foreground sm:block">Your spending across all CoTenanty units</p>
       </div>
 
       {memberships.length === 0 ? (

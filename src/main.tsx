@@ -23,7 +23,7 @@ if (root) {
                 fontFamily: 'system-ui',
               }}
             >
-              Loading COTENANTY...
+              Loading CoTenanty...
             </div>
           }
         >

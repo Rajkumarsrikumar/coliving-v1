@@ -1,6 +1,6 @@
-# COTENANTY Rental Platform
+# CoTenanty Rental Platform
 
-A React + Supabase app for tracking shared expenses, splitting costs, and managing contributions in COTENANTY spaces.
+A React + Supabase app for tracking shared expenses, splitting costs, and managing contributions in CoTenanty spaces.
 
 ## Features
 
@@ -59,7 +59,7 @@ src/
 ## Supabase Schema
 
 - `profiles` – User profiles (extends auth.users)
-- `units` – COTENANTY properties
+- `units` – CoTenanty properties
 - `unit_members` – User–unit junction with role and share %
 - `expenses` – Expense records
 - `contributions` – One-time contribution requests

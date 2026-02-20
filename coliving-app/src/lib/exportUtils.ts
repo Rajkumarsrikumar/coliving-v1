@@ -137,7 +137,7 @@ export function exportUnitReport(params: {
   const reportName = `Unit Report — ${unitName} — ${monthLabel} ${year}`
 
   const lines: string[] = []
-  lines.push('COTENANTY')
+  lines.push('CoTenanty')
   lines.push(reportName)
   lines.push('')
   lines.push('Unit Report')
@@ -223,14 +223,14 @@ export function exportUnitReportPDF(params: {
   const doc = new jsPDF({ format: 'a4', unit: 'mm' })
   let y = 18
 
-  // COTENANTY header: icon + text + report name
+  // CoTenanty header: icon + text + report name
   const coral = [245, 93, 74] as [number, number, number]
   doc.setFillColor(...coral)
   doc.roundedRect(14, y - 5, 8, 8, 1.5, 1.5, 'F')
   doc.setFontSize(16)
   doc.setTextColor(...coral)
   doc.setFont('helvetica', 'bold')
-  doc.text('COTENANTY', 25, y + 1)
+  doc.text('CoTenanty', 25, y + 1)
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(10)
   doc.setTextColor(100, 100, 100)

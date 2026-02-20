@@ -85,7 +85,7 @@ export function ExportReportModal({ unit, members, expenses, onClose }: ExportRe
         <div className="mb-4 flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900/50">
           <Home className="h-5 w-5 shrink-0 text-coral-500" />
           <div>
-            <p className="font-medium text-foreground">COTENANTY</p>
+            <p className="font-medium text-foreground">CoTenanty</p>
             <p className="text-xs text-muted-foreground">
               Unit Report — {unit.name} — {MONTHS[month - 1]} {year}
             </p>
