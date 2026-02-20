@@ -583,7 +583,7 @@ export function UnitDashboardPage() {
         {/* Expenses */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
+            <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <HandCoins className="h-5 w-5" />
@@ -591,12 +591,12 @@ export function UnitDashboardPage() {
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">This month: {formatCurrency(thisMonthTotal, currency)}</p>
               </div>
-              <div className="flex gap-1">
+              <div className="flex flex-wrap gap-2">
                 <Link to={`/units/${id}/expenses/new`}>
-                  <Button size="sm">Add</Button>
+                  <Button size="sm" className="w-full sm:w-auto">Add</Button>
                 </Link>
                 <Link to={`/units/${id}/expenses`}>
-                  <Button variant="secondary" size="sm">View all</Button>
+                  <Button variant="secondary" size="sm" className="w-full sm:w-auto">View all</Button>
                 </Link>
               </div>
             </CardHeader>
@@ -608,14 +608,16 @@ export function UnitDashboardPage() {
                     return (
                       <div
                         key={exp.id}
-                        className="flex items-center justify-between gap-2 rounded border px-2 py-1.5 text-sm"
+                        className="flex flex-col gap-0.5 rounded border px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-2 sm:py-1.5"
                       >
                         <div className="flex min-w-0 items-center gap-2">
                           <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${cat?.color || 'bg-gray-500'}`} />
-                          <span className="truncate">{cat?.label || exp.category}</span>
-                          <span className="text-xs text-muted-foreground">{formatDate(exp.date)}</span>
+                          <div className="min-w-0 flex-1">
+                            <span className="block truncate font-medium sm:inline">{cat?.label || exp.category}</span>
+                            <span className="block text-xs text-muted-foreground sm:ml-2 sm:inline">{formatDate(exp.date)}</span>
+                          </div>
                         </div>
-                        <span className="shrink-0 font-medium">{formatCurrency(exp.amount, currency)}</span>
+                        <span className="shrink-0 font-medium tabular-nums">{formatCurrency(exp.amount, currency)}</span>
                       </div>
                     )
                   })}

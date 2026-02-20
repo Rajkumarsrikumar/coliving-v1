@@ -312,25 +312,25 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                                 </div>
                               </div>
                             ) : (
-                              <div className="flex flex-wrap items-center justify-between gap-3">
-                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                                <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-1 text-sm">
                                   {monthEntries
                                     .filter((e) => e.amount > 0)
                                     .map((e) => {
                                       const cat = EXPENSE_CATEGORIES.find((c) => c.value === e.category)
                                       return (
-                                        <span key={e.id} className="text-muted-foreground">
+                                        <span key={e.id} className="flex justify-between text-muted-foreground sm:inline">
                                           <span className="font-medium text-foreground">{cat?.label}:</span>{' '}
-                                          {formatCurrency(e.amount, currency)}
+                                          <span className="tabular-nums sm:inline">{formatCurrency(e.amount, currency)}</span>
                                         </span>
                                       )
                                     })}
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1">
                                   <Button
                                     variant="secondary"
                                     size="sm"
-                                    className="h-8 gap-1.5 px-2.5 text-xs"
+                                    className="h-8 w-full justify-center gap-1.5 px-2.5 text-xs sm:w-auto"
                                     onClick={() => {
                                       setEditingMonth(month)
                                       setEditingAmounts(
@@ -344,7 +344,7 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                                   <button
                                     type="button"
                                     onClick={() => setDeleteConfirmMonth(month)}
-                                    className="flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                                    className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md px-2.5 text-xs text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 sm:w-auto dark:hover:bg-red-950/30 dark:hover:text-red-400"
                                     aria-label="Delete month"
                                   >
                                     <Trash2 className="h-3.5 w-3.5" />

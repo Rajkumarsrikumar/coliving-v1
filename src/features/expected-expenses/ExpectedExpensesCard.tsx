@@ -244,8 +244,8 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                       const isEditing = editingMonth === month
                       const currency = getCurrencyForCountry(unit.country)
                       return (
-                        <div key={month} className="flex items-center gap-2 rounded border px-2 py-1.5 text-sm">
-                          <span className="w-20 shrink-0 text-muted-foreground">{formatDate(month + '-01')}</span>
+                        <div key={month} className="flex flex-col gap-2 rounded border px-3 py-2 text-sm sm:flex-row sm:items-center sm:gap-2 sm:px-2 sm:py-1.5">
+                          <span className="w-full shrink-0 font-medium text-muted-foreground sm:w-20">{formatDate(month + '-01')}</span>
                           {isEditing ? (
                             <>
                               <div className="flex flex-1 flex-wrap gap-x-2 gap-y-1">
@@ -300,19 +300,21 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                             </>
                           ) : (
                             <>
-                              <div className="flex flex-1 flex-wrap gap-x-3 gap-y-0.5 text-muted-foreground">
+                              <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-0.5 text-muted-foreground">
                                 {monthEntries
                                   .filter((e) => e.amount > 0)
                                   .map((e) => {
                                     const cat = EXPENSE_CATEGORIES.find((c) => c.value === e.category)
                                     return (
-                                      <span key={e.id}>
-                                        {cat?.label}: {formatCurrency(e.amount, currency)}
+                                      <span key={e.id} className="flex justify-between sm:inline">
+                                        <span>{cat?.label}:</span> <span className="tabular-nums">{formatCurrency(e.amount, currency)}</span>
                                       </span>
                                     )
                                   })}
                               </div>
-                              <span className="w-16 shrink-0 text-right font-medium">{formatCurrency(total, currency)}</span>
+                              <div className="flex items-center justify-between gap-2 sm:contents">
+                                <span className="font-medium tabular-nums sm:w-16 sm:shrink-0 sm:text-right">{formatCurrency(total, currency)}</span>
+                                <div className="flex gap-1 sm:contents">
                               <button
                                 type="button"
                                 onClick={() => {
@@ -338,6 +340,8 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                               </button>
+                                </div>
+                              </div>
                             </>
                           )}
                         </div>

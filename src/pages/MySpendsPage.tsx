@@ -181,7 +181,7 @@ export function MySpendsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
                   <div>
                     <p className="text-xs text-muted-foreground sm:text-sm">Paid</p>
                     <p className="text-base font-semibold tabular-nums sm:text-lg">{formatCurrency(thisMonthPaid, primaryCurrency)}</p>
