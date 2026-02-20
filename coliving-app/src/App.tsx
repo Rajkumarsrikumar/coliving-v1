@@ -1,9 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './components/ThemeProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from './hooks/useAuth'
 import { Header } from './components/layout/Header'
+import { MobileHeader } from './components/layout/MobileHeader'
 import { BottomNav } from './components/layout/BottomNav'
 import { LoginPage } from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
@@ -27,6 +29,7 @@ const queryClient = new QueryClient({
 
 function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
+  const location = useLocation()
 
   if (loading) {
     return (
@@ -52,14 +55,17 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
       <div className="hidden lg:block">
         <Header />
       </div>
-      {/* Mobile/tablet: fixed bottom nav - hidden on desktop */}
+      {/* Mobile/tablet: top bar with logo + bottom nav - hidden on desktop */}
       <div className="lg:hidden">
+        <MobileHeader />
         <BottomNav />
       </div>
-      <main className="flex flex-1 flex-col pb-16 pt-4 lg:pb-0 lg:pt-14">
+      <main className="flex flex-1 flex-col pb-20 pt-12 lg:pb-0 lg:pt-14">
         <div className="mx-auto w-full max-w-6xl flex-1 xl:max-w-7xl">
           <AnimatePresence mode="wait">
-            {children}
+            {React.isValidElement(children)
+              ? React.cloneElement(children, { key: location.pathname } as { key: string })
+              : children}
           </AnimatePresence>
         </div>
       </main>
@@ -80,10 +86,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <HomePage />
@@ -96,9 +102,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <CreateUnitPage />
@@ -111,9 +118,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <UnitDashboardPage />
@@ -126,9 +134,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <ExpensesPage />
@@ -141,9 +150,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <AddExpensePage />
@@ -156,9 +166,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <MySpendsPage />
@@ -171,9 +182,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <ProfilePage />
@@ -186,9 +198,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <UnitMembersPage />
@@ -201,9 +214,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <ContributionsPage />
@@ -216,9 +230,10 @@ function App() {
             element={
               <ProtectedLayout>
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
                   className="flex-1"
                 >
                   <AddContributionPage />

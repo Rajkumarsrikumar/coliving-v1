@@ -555,10 +555,46 @@ export function UnitDashboardPage() {
                 <Users className="h-5 w-5 text-coral-500" />
                 Balances
               </CardTitle>
-              <p className="hidden text-sm text-muted-foreground sm:block">Expected amount, paid, and balance per member</p>
+              <p className="text-sm text-muted-foreground">Expected amount, paid, and balance per member</p>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="overflow-x-auto">
+              {/* Mobile & Tablet: card layout */}
+              <div className="space-y-3 p-4 lg:hidden">
+                {balances.map(({ member, expected, paid, balance }) => (
+                  <div
+                    key={member.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-800/30"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                        {(member.profile?.name || '?')[0]}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-foreground">{member.profile?.name || 'Unknown'}</p>
+                        <p className="text-xs text-muted-foreground">{formatMemberContribution(member, currency)}</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-3 gap-3 border-t border-slate-200 pt-3 dark:border-slate-700">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Expected</p>
+                        <p className="font-medium tabular-nums text-foreground">{formatCurrency(expected, currency)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Paid</p>
+                        <p className="font-medium tabular-nums text-foreground">{formatCurrency(paid, currency)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Balance</p>
+                        <p className={`font-semibold tabular-nums ${balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>
+                          {balance > 0 ? '+' : ''}{formatCurrency(balance, currency)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Desktop: table */}
+              <div className="hidden overflow-x-auto lg:block">
                 <table className="w-full min-w-[360px] text-sm">
                   <thead>
                     <tr className="border-b-2 border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/50">
@@ -635,13 +671,13 @@ export function UnitDashboardPage() {
                     return (
                       <div
                         key={exp.id}
-                        className="flex flex-col gap-0.5 rounded-lg border border-slate-100 px-4 py-3 text-sm transition-colors hover:border-slate-200 hover:bg-slate-50/50 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:bg-slate-800/30 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
+                        className="flex flex-row items-center justify-between gap-3 rounded-lg border border-slate-100 px-4 py-3 text-sm transition-colors hover:border-slate-200 hover:bg-slate-50/50 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:bg-slate-800/30"
                       >
                         <div className="flex min-w-0 items-center gap-3">
                           <div className={`h-2.5 w-2.5 shrink-0 rounded-full ${cat?.color || 'bg-gray-500'}`} />
                           <div className="min-w-0 flex-1">
-                            <span className="block truncate font-medium sm:inline">{cat?.label || exp.category}</span>
-                            <span className="block text-xs text-muted-foreground sm:ml-2 sm:inline">{formatDate(exp.date)}</span>
+                            <span className="block truncate font-medium">{cat?.label || exp.category}</span>
+                            <span className="block text-xs text-muted-foreground">{formatDate(exp.date)}</span>
                           </div>
                         </div>
                         <span className="shrink-0 font-semibold tabular-nums text-foreground">{formatCurrency(exp.amount, currency)}</span>

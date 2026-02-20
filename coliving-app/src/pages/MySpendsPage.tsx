@@ -149,9 +149,22 @@ export function MySpendsPage() {
         </Card>
       ) : (
         <div className="space-y-6">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <Card className="overflow-hidden bg-gradient-to-br from-coral-500 to-coral-600 text-white">
-              <CardContent className="p-4 sm:p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+            whileHover={{ scale: 1.01, y: -2 }}
+          >
+            <Card className="overflow-hidden relative bg-gradient-to-br from-coral-500 to-coral-600 text-white">
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  animate={{ x: ['-100%', '200%'] }}
+                  transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 2.5 }}
+                  style={{ width: '60%' }}
+                />
+              </div>
+              <CardContent className="relative z-10 p-4 sm:p-6">
                 <p className="text-sm opacity-90">Total you&apos;ve paid (all time)</p>
                 <p className="mt-1 text-2xl font-bold tabular-nums">{formatCurrency(totalPaid, primaryCurrency)}</p>
                 <div className="mt-3 text-sm opacity-90 sm:mt-2">
@@ -173,7 +186,11 @@ export function MySpendsPage() {
             </Card>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30, x: -10 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            transition={{ delay: 0.08, type: 'spring', stiffness: 350, damping: 25 }}
+          >
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -202,7 +219,11 @@ export function MySpendsPage() {
             </Card>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30, x: 10 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            transition={{ delay: 0.12, type: 'spring', stiffness: 350, damping: 25 }}
+          >
             <Card className="overflow-hidden shadow-sm">
               <CardHeader className="border-b border-slate-100 dark:border-slate-800">
                 <CardTitle className="flex items-center gap-2">

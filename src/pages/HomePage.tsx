@@ -96,17 +96,29 @@ export function HomePage() {
       </div>
       <motion.div
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        style={{ perspective: 1200 }}
         initial="hidden"
         animate="visible"
         variants={{
-          visible: { transition: { staggerChildren: 0.05 } },
+          visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
           hidden: {},
         }}
       >
         {units.map((unit) => (
-          <motion.div key={unit.id} variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
+          <motion.div
+            key={unit.id}
+            variants={{ hidden: { opacity: 0, y: 40, rotateX: -12 }, visible: { opacity: 1, y: 0, rotateX: 0 } }}
+            transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+            style={{ perspective: 1000 }}
+          >
             <Link to={`/units/${unit.id}`}>
-              <Card className="cursor-pointer overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg">
+              <motion.div
+                className="cursor-pointer overflow-hidden"
+                whileHover={{ y: -6, scale: 1.03, boxShadow: '0 20px 40px -15px rgba(0,0,0,0.25)' }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              >
+              <Card className="overflow-hidden h-full transition-shadow">
                 <div className="relative h-32 overflow-hidden bg-slate-100 dark:bg-slate-800">
                   {unit.image_url ? (
                     <img
@@ -137,6 +149,7 @@ export function HomePage() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             </Link>
           </motion.div>
         ))}
