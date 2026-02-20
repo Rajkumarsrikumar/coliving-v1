@@ -241,16 +241,16 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                 <div className="mt-3">
                   {/* Desktop: compact table view for better scanability */}
                   <div className="hidden overflow-x-auto md:block">
-                    <div className="max-h-[420px] overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="max-h-[480px] overflow-y-auto rounded-xl border border-slate-200 shadow-sm dark:border-slate-700 dark:shadow-slate-900/50">
                       <table className="w-full min-w-[560px] text-sm">
-                        <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50/95 dark:border-slate-700 dark:bg-slate-900/95">
+                        <thead className="sticky top-0 z-10 border-b-2 border-slate-200 bg-slate-100/95 dark:border-slate-600 dark:bg-slate-800/95 backdrop-blur-sm">
                           <tr>
-                            <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Date</th>
+                            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
                             {EXPENSE_CATEGORIES.map((cat) => (
-                              <th key={cat.value} className="px-3 py-2.5 text-right font-medium text-muted-foreground">{cat.label}</th>
+                              <th key={cat.value} className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">{cat.label}</th>
                             ))}
-                            <th className="px-4 py-2.5 text-right font-semibold text-foreground">Total</th>
-                            <th className="w-24 px-2 py-2.5" aria-label="Actions" />
+                            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-foreground">Total</th>
+                            <th className="w-28 px-3 py-3" aria-label="Actions" />
                           </tr>
                         </thead>
                         <tbody>
@@ -265,14 +265,14 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                               return (
                                 <tr
                                   key={month}
-                                  className={`border-b border-slate-100 last:border-0 dark:border-slate-800 ${isEditing ? 'bg-amber-50/50 dark:bg-amber-950/20' : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/30'}`}
+                                  className={`border-b border-slate-100 last:border-0 dark:border-slate-800 ${isEditing ? 'bg-amber-50/80 dark:bg-amber-950/30' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 even:bg-slate-50/30 dark:even:bg-slate-800/20'}`}
                                 >
-                                  <td className="px-4 py-2.5 font-medium text-foreground">{monthLabel}</td>
+                                  <td className="px-4 py-3 font-medium text-foreground">{monthLabel}</td>
                                   {EXPENSE_CATEGORIES.map((cat) => {
                                     const entry = monthEntries.find((e) => e.category === cat.value)
                                     const amount = amountByCat[cat.value] ?? 0
                                     return (
-                                      <td key={cat.value} className="px-2 py-2 text-right">
+                                      <td key={cat.value} className="px-2 py-3 text-right">
                                         {isEditing && entry ? (
                                           <Input
                                             type="number"
@@ -292,8 +292,8 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                                       </td>
                                     )
                                   })}
-                                  <td className="px-4 py-2.5 text-right font-semibold tabular-nums">{formatCurrency(total, currency)}</td>
-                                  <td className="px-2 py-2.5">
+                                  <td className="px-4 py-3 text-right font-semibold tabular-nums text-foreground">{formatCurrency(total, currency)}</td>
+                                  <td className="px-3 py-3">
                                     {isEditing ? (
                                       <div className="flex items-center gap-1">
                                         <Button

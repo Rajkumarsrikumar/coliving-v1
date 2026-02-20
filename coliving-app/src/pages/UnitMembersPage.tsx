@@ -77,20 +77,20 @@ export function UnitMembersPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Current members */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <Card>
-            <CardHeader>
+          <Card className="overflow-hidden shadow-sm">
+            <CardHeader className="border-b border-slate-100 dark:border-slate-800">
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+                <Users className="h-5 w-5 text-coral-500" />
                 Members ({members.length})
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4">
               {/* Mobile: 1 col | Tablet: 2 cols | Website (narrow card): 1 col */}
               <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-start gap-3 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 sm:rounded-lg sm:p-3"
+                    className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/30 p-4 transition-all hover:border-slate-300 hover:bg-slate-50/60 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/20 dark:hover:border-slate-600 dark:hover:bg-slate-800/40 sm:rounded-lg sm:p-3"
                   >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
                       {(member.profile?.name || '?')[0]}

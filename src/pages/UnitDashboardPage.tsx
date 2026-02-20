@@ -534,19 +534,19 @@ export function UnitDashboardPage() {
       <div className="grid gap-6 lg:grid-cols-2 xl:gap-8">
         {/* Balances */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-          <Card>
-            <CardHeader>
+          <Card className="overflow-hidden shadow-sm">
+            <CardHeader className="border-b border-slate-100 dark:border-slate-800">
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+                <Users className="h-5 w-5 text-coral-500" />
                 Balances
               </CardTitle>
               <p className="hidden text-sm text-muted-foreground sm:block">Expected amount, paid, and balance per member</p>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 p-4">
               {balances.map(({ member, expected, paid, balance }) => (
                 <div
                   key={member.id}
-                  className="rounded-lg border p-3"
+                  className="rounded-xl border border-slate-200 bg-slate-50/30 p-4 transition-all hover:border-slate-300 hover:bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/20 dark:hover:border-slate-600 dark:hover:bg-slate-800/30"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
@@ -582,14 +582,16 @@ export function UnitDashboardPage() {
 
         {/* Expenses */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-          <Card>
-            <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Card className="overflow-hidden shadow-sm">
+            <CardHeader className="flex flex-col gap-3 border-b border-slate-100 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <HandCoins className="h-5 w-5" />
+                  <HandCoins className="h-5 w-5 text-coral-500" />
                   Expenses
                 </CardTitle>
-                <p className="text-sm text-muted-foreground">This month: {formatCurrency(thisMonthTotal, currency)}</p>
+                <p className="mt-1 text-sm font-medium text-muted-foreground">
+                  This month: <span className="font-semibold text-foreground tabular-nums">{formatCurrency(thisMonthTotal, currency)}</span>
+                </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link to={`/units/${id}/expenses/new`}>
@@ -600,7 +602,7 @@ export function UnitDashboardPage() {
                 </Link>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4">
               {thisMonthExpenses.length > 0 ? (
                 <div className="space-y-2">
                   {thisMonthExpenses.slice(0, 4).map((exp) => {
@@ -608,16 +610,16 @@ export function UnitDashboardPage() {
                     return (
                       <div
                         key={exp.id}
-                        className="flex flex-col gap-0.5 rounded border px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-2 sm:px-2 sm:py-1.5"
+                        className="flex flex-col gap-0.5 rounded-lg border border-slate-100 px-4 py-3 text-sm transition-colors hover:border-slate-200 hover:bg-slate-50/50 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:bg-slate-800/30 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                       >
-                        <div className="flex min-w-0 items-center gap-2">
-                          <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${cat?.color || 'bg-gray-500'}`} />
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className={`h-2.5 w-2.5 shrink-0 rounded-full ${cat?.color || 'bg-gray-500'}`} />
                           <div className="min-w-0 flex-1">
                             <span className="block truncate font-medium sm:inline">{cat?.label || exp.category}</span>
                             <span className="block text-xs text-muted-foreground sm:ml-2 sm:inline">{formatDate(exp.date)}</span>
                           </div>
                         </div>
-                        <span className="shrink-0 font-medium tabular-nums">{formatCurrency(exp.amount, currency)}</span>
+                        <span className="shrink-0 font-semibold tabular-nums text-foreground">{formatCurrency(exp.amount, currency)}</span>
                       </div>
                     )
                   })}
