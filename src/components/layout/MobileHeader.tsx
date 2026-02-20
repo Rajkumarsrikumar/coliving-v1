@@ -25,7 +25,7 @@ export function MobileHeader() {
       initial={{ y: -80, opacity: 0, scaleY: 0.9 }}
       animate={{ y: 0, opacity: 1, scaleY: 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-      className="fixed inset-x-0 top-0 z-40 flex h-12 shrink-0 items-center justify-between gap-2 border-b bg-card/95 px-4 shadow-sm supports-[backdrop-filter]:bg-card/80 backdrop-blur"
+      className="fixed inset-x-0 top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-card/95 px-4 shadow-sm supports-[backdrop-filter]:bg-card/80 backdrop-blur"
     >
       <Link
         to="/home"

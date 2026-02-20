@@ -60,7 +60,7 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
         <MobileHeader />
         <BottomNav />
       </div>
-      <main className="flex flex-1 flex-col pb-20 pt-12 lg:pb-0 lg:pt-14">
+      <main className="flex flex-1 flex-col pb-16 pt-14 lg:pb-0 lg:pt-14">
         <div className="mx-auto w-full max-w-6xl flex-1 xl:max-w-7xl">
           <AnimatePresence mode="wait">
             {React.isValidElement(children)

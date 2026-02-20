@@ -37,12 +37,12 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 flex w-full"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <nav className="relative flex h-20 w-full items-end justify-around overflow-visible rounded-t-[1.25rem] pb-2 pt-2">
+      <nav className="relative flex h-14 w-full items-end justify-around overflow-visible rounded-t-[1.25rem] pb-1.5 pt-1.5">
         <div
           className="pointer-events-none absolute inset-0 rounded-t-[1.25rem] bg-card/95 shadow-lg supports-[backdrop-filter]:bg-card/80 backdrop-blur"
           style={{
-            WebkitMaskImage: `radial-gradient(circle 44px at ${cutoutX}% 0, transparent 44px, white 45px)`,
-            maskImage: `radial-gradient(circle 44px at ${cutoutX}% 0, transparent 44px, white 45px)`,
+            WebkitMaskImage: `radial-gradient(circle 36px at ${cutoutX}% 0, transparent 36px, white 37px)`,
+            maskImage: `radial-gradient(circle 36px at ${cutoutX}% 0, transparent 36px, white 37px)`,
           }}
           aria-hidden
         />
@@ -57,19 +57,19 @@ export function BottomNav() {
                 initial={{ opacity: 0, y: 20, scale: 0.8 }}
                 animate={{
                   opacity: 1,
-                  y: isActive ? -14 : 8,
+                  y: isActive ? -10 : 6,
                   scale: 1,
                 }}
                 transition={{ delay: i * 0.08, type: 'spring', stiffness: 400, damping: 22 }}
                 whileTap={{ scale: 0.9, transition: { duration: 0.1 } }}
                 className={cn(
-                  'relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-colors',
+                  'relative flex flex-1 flex-col items-center justify-center gap-0.5 py-1.5 transition-colors',
                   isActive
                     ? 'text-white'
                     : 'text-slate-500/80 dark:text-slate-500 hover:text-slate-400 dark:hover:text-slate-400'
                 )}
               >
-                <div className="relative flex flex-col items-center justify-center gap-0.5 px-6 py-3">
+                <div className="relative flex flex-col items-center justify-center gap-0.5 px-5 py-2">
                   {isActive && (
                     <motion.div
                       layoutId="bottom-nav-indicator"
