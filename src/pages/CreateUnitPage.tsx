@@ -18,7 +18,7 @@ export function CreateUnitPage() {
           <CardHeader>
             <CardTitle>Create a new unit</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Add your coliving space to start tracking expenses and splitting costs.
+              Add your COTENANTY space to start tracking expenses and splitting costs.
             </p>
           </CardHeader>
           <CardContent>

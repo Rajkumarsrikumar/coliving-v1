@@ -16,7 +16,7 @@ export function Header({ className }: HeaderProps) {
   const location = useLocation()
   const queryClient = useQueryClient()
 
-  const handleColivingClick = () => {
+  const handleCotenantyClick = () => {
     queryClient.invalidateQueries({ queryKey: ['units'] })
     if (location.pathname === '/home') {
       queryClient.invalidateQueries({ queryKey: ['unit-members-count'] })
@@ -33,11 +33,11 @@ export function Header({ className }: HeaderProps) {
     >
       <Link
         to="/home"
-        onClick={handleColivingClick}
+        onClick={handleCotenantyClick}
         className="flex min-w-0 shrink items-center gap-2 font-display text-lg font-bold tracking-tight text-coral-500 transition-colors hover:text-coral-600"
       >
         <Home className="h-6 w-6" />
-        Coliving
+        COTENANTY
       </Link>
       <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
         <Link

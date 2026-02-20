@@ -75,7 +75,7 @@ export function HomePage() {
         <EmptyState
           icon={Users}
           title="No units yet"
-          description="Create your first coliving unit to start tracking expenses and splitting costs with your housemates."
+          description="Create your first COTENANTY unit to start tracking expenses and splitting costs with your housemates."
           actionLabel="Create unit"
           onAction={() => (window.location.href = '/units/new')}
         />

@@ -1,6 +1,6 @@
-# Coliving Rental Platform
+# COTENANTY Rental Platform
 
-A React + Supabase app for tracking shared expenses, splitting costs, and managing contributions in coliving spaces.
+A React + Supabase app for tracking shared expenses, splitting costs, and managing contributions in COTENANTY spaces.
 
 ## Features
 
@@ -59,7 +59,7 @@ src/
 ## Supabase Schema
 
 - `profiles` – User profiles (extends auth.users)
-- `units` – Coliving properties
+- `units` – COTENANTY properties
 - `unit_members` – User–unit junction with role and share %
 - `expenses` – Expense records
 - `contributions` – One-time contribution requests

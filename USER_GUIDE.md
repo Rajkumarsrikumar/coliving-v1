@@ -1,6 +1,6 @@
-# Coliving App – User Guide
+# COTENANTY App – User Guide
 
-A web app for tracking shared expenses, splitting costs, and managing payments in coliving spaces.
+A web app for tracking shared expenses, splitting costs, and managing payments in COTENANTY spaces.
 
 ---
 
@@ -23,7 +23,7 @@ A web app for tracking shared expenses, splitting costs, and managing payments i
 
 ### Sign Up / Log In
 
-1. Open the Coliving app in your browser.
+1. Open the COTENANTY app in your browser.
 2. Click **Sign up** to create an account (email + password).
 3. Or use **Log in** if you already have an account.
 
