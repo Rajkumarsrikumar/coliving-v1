@@ -559,33 +559,33 @@ export function UnitDashboardPage() {
             </CardHeader>
             <CardContent className="p-0">
               {/* Mobile & Tablet: card layout */}
-              <div className="space-y-3 p-4 lg:hidden">
+              <div className="space-y-3 p-3 sm:p-4 lg:hidden">
                 {balances.map(({ member, expected, paid, balance }) => (
                   <div
                     key={member.id}
-                    className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-800/30"
+                    className="rounded-xl border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-700 dark:bg-slate-800/30 sm:p-4"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 text-sm font-medium text-coral-600 dark:bg-coral-900/30 sm:h-10 sm:w-10">
                         {(member.profile?.name || '?')[0]}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-foreground">{member.profile?.name || 'Unknown'}</p>
-                        <p className="text-xs text-muted-foreground">{formatMemberContribution(member, currency)}</p>
+                        <p className="truncate font-semibold text-foreground">{member.profile?.name || 'Unknown'}</p>
+                        <p className="truncate text-xs text-muted-foreground">{formatMemberContribution(member, currency)}</p>
                       </div>
                     </div>
-                    <div className="mt-3 grid grid-cols-3 gap-3 border-t border-slate-200 pt-3 dark:border-slate-700">
-                      <div>
+                    <div className="mt-3 flex flex-col gap-2 border-t border-slate-200 pt-3 sm:grid sm:grid-cols-3 sm:gap-3 dark:border-slate-700">
+                      <div className="flex items-center justify-between sm:flex-col sm:items-start sm:gap-0.5">
                         <p className="text-xs text-muted-foreground">Expected</p>
-                        <p className="font-medium tabular-nums text-foreground">{formatCurrency(expected, currency)}</p>
+                        <p className="font-medium tabular-nums text-foreground sm:text-base">{formatCurrency(expected, currency)}</p>
                       </div>
-                      <div>
+                      <div className="flex items-center justify-between sm:flex-col sm:items-start sm:gap-0.5">
                         <p className="text-xs text-muted-foreground">Paid</p>
-                        <p className="font-medium tabular-nums text-foreground">{formatCurrency(paid, currency)}</p>
+                        <p className="font-medium tabular-nums text-foreground sm:text-base">{formatCurrency(paid, currency)}</p>
                       </div>
-                      <div>
+                      <div className="flex items-center justify-between sm:flex-col sm:items-start sm:gap-0.5">
                         <p className="text-xs text-muted-foreground">Balance</p>
-                        <p className={`font-semibold tabular-nums ${balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>
+                        <p className={`font-semibold tabular-nums sm:text-base ${balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>
                           {balance > 0 ? '+' : ''}{formatCurrency(balance, currency)}
                         </p>
                       </div>

@@ -14,9 +14,10 @@ export function BottomNav() {
   const location = useLocation()
   const queryClient = useQueryClient()
 
-  const activeIndex = navItems.findIndex(({ to }) =>
-    to === '/home' ? location.pathname === '/home' : location.pathname.startsWith(to)
-  )
+  const activeIndex = navItems.findIndex(({ to }) => {
+    if (to === '/home') return location.pathname === '/home' || location.pathname.startsWith('/units')
+    return location.pathname.startsWith(to)
+  })
   const cutoutX = activeIndex >= 0 ? ((activeIndex + 0.5) / navItems.length) * 100 : 50
 
   const handleHomeClick = () => {
@@ -48,7 +49,7 @@ export function BottomNav() {
         {navItems.map(({ to, icon: Icon, label }, i) => {
           const isActive =
             to === '/home'
-              ? location.pathname === '/home'
+              ? location.pathname === '/home' || location.pathname.startsWith('/units')
               : location.pathname.startsWith(to)
           return (
             <Link key={to} to={to} onClick={to === '/home' ? handleHomeClick : undefined} className="relative flex flex-1">
