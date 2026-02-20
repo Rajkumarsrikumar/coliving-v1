@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { Wallet, Home, ArrowLeft, TrendingUp } from 'lucide-react'
@@ -11,6 +11,7 @@ import type { Unit, Expense, UnitMember } from '../types'
 
 export function MySpendsPage() {
   const { user } = useAuth()
+  const navigate = useNavigate()
 
   const { data: memberships = [], isLoading: membersLoading } = useQuery({
     queryKey: ['my-units', user?.id],
@@ -208,37 +209,86 @@ export function MySpendsPage() {
                   <Home className="h-5 w-5 text-coral-500" />
                   By unit
                 </CardTitle>
+                <p className="text-sm text-muted-foreground">Click a unit to view details</p>
               </CardHeader>
-              <CardContent className="p-4">
-                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+              <CardContent className="p-0">
+                {/* Mobile: stacked cards with labeled rows */}
+                <div className="space-y-3 p-4 md:hidden">
                   {summary.map((s) => {
                     const currency = getCurrencyForCountry(s.unit.country)
                     return (
-                      <Link key={s.unit.id} to={`/units/${s.unit.id}`}>
-                        <div className="flex min-h-[88px] items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all hover:border-slate-300 hover:bg-slate-100/80 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/30 dark:hover:border-slate-600 dark:hover:bg-slate-800/50 sm:min-h-0 md:min-h-[80px]">
+                      <Link key={s.unit.id} to={`/units/${s.unit.id}`} className="block">
+                        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800/30">
                           <div className="min-w-0 flex-1">
-                            <p className="text-base font-semibold text-foreground sm:text-sm md:text-base">{s.unit.name}</p>
-                            <div className="mt-2 flex flex-col gap-1 text-sm sm:mt-1.5 md:flex-row md:flex-wrap md:gap-x-3 md:gap-y-0">
-                              <span className="text-muted-foreground">
-                                Paid {formatCurrency(s.myPaid, currency)}
-                              </span>
-                              <span className="text-muted-foreground">
-                                Share {formatCurrency(s.myOwed, currency)}
-                              </span>
-                              {s.balance !== 0 && (
-                                <span className={`font-semibold ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
-                                  {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), currency)}
-                                </span>
-                              )}
+                            <p className="text-base font-semibold text-foreground">{s.unit.name}</p>
+                            <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                              <div>
+                                <p className="text-xs text-muted-foreground">Paid</p>
+                                <p className="font-medium tabular-nums text-foreground">{formatCurrency(s.myPaid, currency)}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground">Share</p>
+                                <p className="font-medium tabular-nums text-foreground">{formatCurrency(s.myOwed, currency)}</p>
+                              </div>
+                              <div className="col-span-2">
+                                <p className="text-xs text-muted-foreground">Balance</p>
+                                <p className={`font-semibold tabular-nums ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : s.balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`}>
+                                  {s.balance > 0 ? '+' : ''}{formatCurrency(s.balance, currency)}
+                                  {s.balance !== 0 && (
+                                    <span className="ml-1 text-xs font-normal text-muted-foreground">
+                                      {s.balance > 0 ? '(owed to you)' : '(you owe)'}
+                                    </span>
+                                  )}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                          <span className="flex h-10 min-w-[40px] shrink-0 items-center justify-center text-lg text-coral-500 md:min-w-[32px]">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 text-lg text-coral-600 dark:bg-coral-900/30 dark:text-coral-400">
                             →
                           </span>
                         </div>
                       </Link>
                     )
                   })}
+                </div>
+                {/* Tablet & Desktop: table format */}
+                <div className="hidden overflow-x-auto md:block">
+                  <table className="w-full min-w-[480px] text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/50">
+                        <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Unit</th>
+                        <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Paid</th>
+                        <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Share</th>
+                        <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Balance</th>
+                        <th className="w-12 px-2 py-3" aria-hidden />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {summary.map((s, idx) => {
+                        const currency = getCurrencyForCountry(s.unit.country)
+                        return (
+                          <tr
+                            key={s.unit.id}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => navigate(`/units/${s.unit.id}`)}
+                            onKeyDown={(e) => e.key === 'Enter' && navigate(`/units/${s.unit.id}`)}
+                            className={`cursor-pointer border-b border-slate-100 last:border-0 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/30 ${idx % 2 === 1 ? 'bg-slate-50/30 dark:bg-slate-800/10' : ''}`}
+                          >
+                            <td className="px-4 py-3.5 font-medium text-foreground">{s.unit.name}</td>
+                            <td className="px-4 py-3.5 text-right font-medium tabular-nums text-foreground">{formatCurrency(s.myPaid, currency)}</td>
+                            <td className="px-4 py-3.5 text-right font-medium tabular-nums text-foreground">{formatCurrency(s.myOwed, currency)}</td>
+                            <td className={`px-4 py-3.5 text-right font-semibold tabular-nums ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : s.balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'}`}>
+                              {s.balance > 0 ? '+' : ''}{formatCurrency(s.balance, currency)}
+                            </td>
+                            <td className="w-12 px-2 py-3.5 text-center">
+                              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-coral-500">→</span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </CardContent>
             </Card>

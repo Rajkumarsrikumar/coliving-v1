@@ -558,41 +558,7 @@ export function UnitDashboardPage() {
               <p className="hidden text-sm text-muted-foreground sm:block">Expected amount, paid, and balance per member</p>
             </CardHeader>
             <CardContent className="p-0">
-              {/* Mobile: card layout */}
-              <div className="space-y-3 p-4 sm:hidden sm:p-0">
-                {balances.map(({ member, expected, paid, balance }) => (
-                  <div
-                    key={member.id}
-                    className="rounded-lg border border-slate-200 p-3 dark:border-slate-700"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
-                        {(member.profile?.name || '?')[0]}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">{member.profile?.name || 'Unknown'}</p>
-                        <p className="text-xs text-muted-foreground">{formatMemberContribution(member, currency, { short: true })}</p>
-                      </div>
-                      <span
-                        className={`shrink-0 font-semibold tabular-nums ${
-                          balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
-                        }`}
-                      >
-                        {balance > 0 ? '+' : ''}
-                        {formatCurrency(balance, currency)}
-                      </span>
-                    </div>
-                    <div className="mt-2 flex justify-between gap-2 border-t border-slate-100 pt-2 text-xs dark:border-slate-800">
-                      <span className="text-muted-foreground">Exp</span>
-                      <span className="font-medium tabular-nums">{formatCurrency(expected, currency)}</span>
-                      <span className="text-muted-foreground">Paid</span>
-                      <span className="font-medium tabular-nums">{formatCurrency(paid, currency)}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Desktop: table layout */}
-              <div className="hidden overflow-x-auto sm:block">
+              <div className="overflow-x-auto">
                 <table className="w-full min-w-[360px] text-sm">
                   <thead>
                     <tr className="border-b-2 border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/50">

@@ -542,40 +542,50 @@ export function UnitDashboardPage() {
               </CardTitle>
               <p className="hidden text-sm text-muted-foreground sm:block">Expected amount, paid, and balance per member</p>
             </CardHeader>
-            <CardContent className="space-y-3 p-4">
-              {balances.map(({ member, expected, paid, balance }) => (
-                <div
-                  key={member.id}
-                  className="rounded-xl border border-slate-200 bg-slate-50/30 p-4 transition-all hover:border-slate-300 hover:bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/20 dark:hover:border-slate-600 dark:hover:bg-slate-800/30"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
-                      {(member.profile?.name || '?')[0]}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium">{member.profile?.name || 'Unknown'}</p>
-                      <p className="text-xs text-muted-foreground sm:hidden">{formatMemberContribution(member, currency, { short: true })}</p>
-                      <p className="hidden text-xs text-muted-foreground sm:block">
-                        Expected {formatCurrency(expected, currency)} · Paid {formatCurrency(paid, currency)} · {formatMemberContribution(member, currency)}
-                      </p>
-                    </div>
-                    <span
-                      className={`shrink-0 font-semibold tabular-nums ${
-                        balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
-                      }`}
-                    >
-                      {balance > 0 ? '+' : ''}
-                      {formatCurrency(balance, currency)}
-                    </span>
-                  </div>
-                  <div className="mt-2 flex justify-between gap-2 border-t border-slate-100 pt-2 text-xs sm:hidden dark:border-slate-800">
-                    <span className="text-muted-foreground">Exp</span>
-                    <span className="font-medium tabular-nums">{formatCurrency(expected, currency)}</span>
-                    <span className="text-muted-foreground">Paid</span>
-                    <span className="font-medium tabular-nums">{formatCurrency(paid, currency)}</span>
-                  </div>
-                </div>
-              ))}
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[360px] text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-slate-200 bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/50">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Member</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Expected</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Paid</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {balances.map(({ member, expected, paid, balance }, idx) => (
+                      <tr key={member.id} className={`border-b border-slate-100 last:border-0 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/30 ${idx % 2 === 1 ? 'bg-slate-50/30 dark:bg-slate-800/10' : ''}`}>
+                        <td className="px-4 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                              {(member.profile?.name || '?')[0]}
+                            </div>
+                            <div>
+                              <p className="font-medium">{member.profile?.name || 'Unknown'}</p>
+                              <p className="text-xs text-muted-foreground">{formatMemberContribution(member, currency)}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5 text-right font-medium tabular-nums text-foreground">
+                          {formatCurrency(expected, currency)}
+                        </td>
+                        <td className="px-4 py-3.5 text-right font-medium tabular-nums text-foreground">
+                          {formatCurrency(paid, currency)}
+                        </td>
+                        <td
+                          className={`px-4 py-3.5 text-right font-semibold tabular-nums ${
+                            balance > 0 ? 'text-green-600 dark:text-green-400' : balance < 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground'
+                          }`}
+                        >
+                          {balance > 0 ? '+' : ''}
+                          {formatCurrency(balance, currency)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
