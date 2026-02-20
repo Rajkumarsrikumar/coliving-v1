@@ -49,7 +49,7 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex flex-1 flex-col">
-        <div className="mx-auto w-full max-w-6xl flex-1">
+        <div className="mx-auto w-full max-w-6xl flex-1 xl:max-w-7xl">
           <AnimatePresence mode="wait">
             {children}
           </AnimatePresence>

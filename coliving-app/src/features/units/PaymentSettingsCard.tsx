@@ -120,12 +120,12 @@ export function PaymentSettingsCard({ unitId, paymentDueDay }: PaymentSettingsCa
           <p className="text-xs text-muted-foreground">
             Define when each bill is due (day of month). Master tenant pays these to landlord/provider.
           </p>
-          <div className="space-y-2">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {FIXED_CATEGORIES.map((cat) => {
               const currentDay = getDueDayForCategory(cat.value)
               return (
-                <div key={cat.value} className="flex flex-wrap items-center gap-2">
-                  <span className="w-24 text-sm">{cat.label}:</span>
+                <div key={cat.value} className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-100 px-3 py-2 dark:border-slate-800">
+                  <span className="min-w-[5rem] text-sm font-medium">{cat.label}:</span>
                   <select
                     value={currentDay ?? ''}
                     onChange={(e) => {

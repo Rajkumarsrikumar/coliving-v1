@@ -210,30 +210,35 @@ export function MySpendsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {summary.map((s) => (
-                    <Link key={s.unit.id} to={`/units/${s.unit.id}`}>
-                      <div className="flex items-start justify-between gap-3 rounded-lg border p-3 transition-colors hover:bg-slate-50 sm:items-center sm:p-4 dark:hover:bg-slate-900/50">
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium">{s.unit.name}</p>
-                          <div className="mt-1.5 flex flex-col gap-0.5 text-sm text-muted-foreground sm:mt-1 sm:block">
-                            <span>Paid {formatCurrency(s.myPaid, getCurrencyForCountry(s.unit.country))}</span>
-                            <span className="hidden sm:inline"> · </span>
-                            <span>Share {formatCurrency(s.myOwed, getCurrencyForCountry(s.unit.country))}</span>
-                            {s.balance !== 0 && (
-                              <>
-                                <span className="hidden sm:inline"> · </span>
-                                <span className={`block sm:inline ${s.balance > 0 ? 'font-medium text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
-                                  {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), getCurrencyForCountry(s.unit.country))}
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+                  {summary.map((s) => {
+                    const currency = getCurrencyForCountry(s.unit.country)
+                    return (
+                      <Link key={s.unit.id} to={`/units/${s.unit.id}`}>
+                        <div className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:border-slate-800 dark:hover:bg-slate-900/50 sm:rounded-lg">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium">{s.unit.name}</p>
+                            <div className="mt-2 flex flex-col gap-1 text-sm sm:mt-1.5 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-0">
+                              <span className="text-muted-foreground">
+                                Paid {formatCurrency(s.myPaid, currency)}
+                              </span>
+                              <span className="text-muted-foreground">
+                                Share {formatCurrency(s.myOwed, currency)}
+                              </span>
+                              {s.balance !== 0 && (
+                                <span className={`font-medium ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                                  {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), currency)}
                                 </span>
-                              </>
-                            )}
+                              )}
+                            </div>
                           </div>
+                          <span className="flex h-11 min-w-[44px] shrink-0 items-center justify-center text-coral-500 sm:h-auto sm:min-w-0">
+                            <span className="text-xl sm:text-base">→</span>
+                          </span>
                         </div>
-                        <span className="shrink-0 text-coral-500">→</span>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>

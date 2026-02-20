@@ -85,18 +85,19 @@ export function UnitMembersPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              {/* Mobile: 1 col | Tablet: 2 cols | Website (narrow card): 1 col */}
+              <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-start gap-3 rounded-lg border p-3 sm:items-center"
+                    className="flex items-start gap-3 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 sm:rounded-lg sm:p-3"
                   >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
                       {(member.profile?.name || '?')[0]}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="font-medium">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="font-medium leading-tight sm:text-base">
                           {member.profile?.name || 'Unknown'}
                           {member.user_id === user?.id && (
                             <span className="ml-1.5 text-xs text-muted-foreground">(you)</span>
@@ -106,7 +107,7 @@ export function UnitMembersPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="shrink-0"
+                            className="h-9 w-9 shrink-0 p-0 sm:h-8 sm:w-8"
                             onClick={() => setEditingMember(member)}
                             aria-label="Edit contribution"
                           >
@@ -114,7 +115,7 @@ export function UnitMembersPage() {
                           </Button>
                         )}
                       </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
+                      <div className="mt-1.5 flex flex-col gap-0.5 text-sm text-muted-foreground sm:mt-1 sm:flex-row sm:flex-wrap sm:gap-x-2 sm:gap-y-0">
                         <span className="flex items-center gap-1">
                           {(member.role === 'master_tenant' || member.role === 'owner') && <Crown className="h-3.5 w-3.5 shrink-0" />}
                           {member.role === 'master_tenant' || member.role === 'owner' ? 'Master tenant' : 'Co-tenant'}

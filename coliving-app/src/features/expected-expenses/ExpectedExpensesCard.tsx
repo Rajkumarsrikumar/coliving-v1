@@ -238,125 +238,246 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                 {showEntries ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </button>
               {showEntries && (
-                <div className="mt-3 space-y-3">
-                  {Object.entries(entriesByMonth)
-                    .sort(([a], [b]) => a.localeCompare(b))
-                    .map(([month, monthEntries]) => {
-                      const total = monthEntries.reduce((s, e) => s + e.amount, 0)
-                      const isEditing = editingMonth === month
-                      const currency = getCurrencyForCountry(unit.country)
-                      const monthLabel = new Date(month + '-01').toLocaleDateString('en', { month: 'short', year: 'numeric' })
-                      return (
-                        <div
-                          key={month}
-                          className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-900/30"
-                        >
-                          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2.5 dark:border-slate-700">
-                            <span className="font-medium text-foreground">{monthLabel}</span>
-                            <span className="text-sm font-semibold">{formatCurrency(total, currency)}</span>
-                          </div>
-                          <div className="p-4">
-                            {isEditing ? (
-                              <div className="space-y-4">
-                                <div className="grid gap-3 sm:grid-cols-2">
-                                  {monthEntries.map((e) => {
-                                    const cat = EXPENSE_CATEGORIES.find((c) => c.value === e.category)
-                                    const val = editingAmounts[e.id] ?? e.amount
+                <div className="mt-3">
+                  {/* Desktop: compact table view for better scanability */}
+                  <div className="hidden overflow-x-auto md:block">
+                    <div className="max-h-[420px] overflow-y-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                      <table className="w-full min-w-[560px] text-sm">
+                        <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50/95 dark:border-slate-700 dark:bg-slate-900/95">
+                          <tr>
+                            <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Date</th>
+                            {EXPENSE_CATEGORIES.map((cat) => (
+                              <th key={cat.value} className="px-3 py-2.5 text-right font-medium text-muted-foreground">{cat.label}</th>
+                            ))}
+                            <th className="px-4 py-2.5 text-right font-semibold text-foreground">Total</th>
+                            <th className="w-24 px-2 py-2.5" aria-label="Actions" />
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(entriesByMonth)
+                            .sort(([a], [b]) => a.localeCompare(b))
+                            .map(([month, monthEntries]) => {
+                              const total = monthEntries.reduce((s, e) => s + e.amount, 0)
+                              const isEditing = editingMonth === month
+                              const currency = getCurrencyForCountry(unit.country)
+                              const monthLabel = new Date(month + '-01').toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' })
+                              const amountByCat = Object.fromEntries(monthEntries.map((e) => [e.category, e.amount]))
+                              return (
+                                <tr
+                                  key={month}
+                                  className={`border-b border-slate-100 last:border-0 dark:border-slate-800 ${isEditing ? 'bg-amber-50/50 dark:bg-amber-950/20' : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/30'}`}
+                                >
+                                  <td className="px-4 py-2.5 font-medium text-foreground">{monthLabel}</td>
+                                  {EXPENSE_CATEGORIES.map((cat) => {
+                                    const entry = monthEntries.find((e) => e.category === cat.value)
+                                    const amount = amountByCat[cat.value] ?? 0
                                     return (
-                                      <div key={e.id} className="flex items-center gap-2">
-                                        <Label className="w-24 shrink-0 text-xs text-muted-foreground">
-                                          {cat?.label}
-                                        </Label>
-                                        <Input
-                                          type="number"
-                                          min={0}
-                                          step={0.01}
-                                          className="h-9 flex-1 text-sm"
-                                          value={val}
-                                          onChange={(ev) =>
-                                            setEditingAmounts((p) => ({ ...p, [e.id]: parseFloat(ev.target.value) || 0 }))
-                                          }
-                                        />
-                                      </div>
+                                      <td key={cat.value} className="px-2 py-2 text-right">
+                                        {isEditing && entry ? (
+                                          <Input
+                                            type="number"
+                                            min={0}
+                                            step={0.01}
+                                            className="h-8 w-20 text-right text-sm"
+                                            value={editingAmounts[entry.id] ?? entry.amount}
+                                            onChange={(ev) =>
+                                              setEditingAmounts((p) => ({ ...p, [entry.id]: parseFloat(ev.target.value) || 0 }))
+                                            }
+                                          />
+                                        ) : (
+                                          <span className="tabular-nums text-muted-foreground">
+                                            {formatCurrency(amount, currency)}
+                                          </span>
+                                        )}
+                                      </td>
                                     )
                                   })}
-                                </div>
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    onClick={() => {
-                                      const updates = monthEntries
-                                        .map((e) => ({ id: e.id, amount: editingAmounts[e.id] ?? e.amount }))
-                                        .filter((u) => u.amount >= 0)
-                                      updateEntriesMutation.mutate(updates, {
-                                        onSuccess: () => {
-                                          setEditingMonth(null)
-                                          setEditingAmounts({})
-                                        },
-                                      })
-                                    }}
-                                    disabled={updateEntriesMutation.isPending}
-                                  >
-                                    {updateEntriesMutation.isPending ? 'Saving...' : 'Save changes'}
-                                  </Button>
-                                  <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    onClick={() => {
-                                      setEditingMonth(null)
-                                      setEditingAmounts({})
-                                    }}
-                                  >
-                                    Cancel
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                                <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-1 text-sm">
-                                  {monthEntries
-                                    .filter((e) => e.amount > 0)
-                                    .map((e) => {
+                                  <td className="px-4 py-2.5 text-right font-semibold tabular-nums">{formatCurrency(total, currency)}</td>
+                                  <td className="px-2 py-2.5">
+                                    {isEditing ? (
+                                      <div className="flex items-center gap-1">
+                                        <Button
+                                          size="sm"
+                                          className="h-7 px-2 text-xs"
+                                          onClick={() => {
+                                            const updates = monthEntries
+                                              .map((e) => ({ id: e.id, amount: editingAmounts[e.id] ?? e.amount }))
+                                              .filter((u) => u.amount >= 0)
+                                            updateEntriesMutation.mutate(updates, {
+                                              onSuccess: () => {
+                                                setEditingMonth(null)
+                                                setEditingAmounts({})
+                                              },
+                                            })
+                                          }}
+                                          disabled={updateEntriesMutation.isPending}
+                                        >
+                                          Save
+                                        </Button>
+                                        <Button
+                                          variant="secondary"
+                                          size="sm"
+                                          className="h-7 px-2 text-xs"
+                                          onClick={() => {
+                                            setEditingMonth(null)
+                                            setEditingAmounts({})
+                                          }}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setEditingMonth(month)
+                                            setEditingAmounts(Object.fromEntries(monthEntries.map((e) => [e.id, e.amount])))
+                                          }}
+                                          className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-slate-200 hover:text-foreground dark:hover:bg-slate-700"
+                                          aria-label="Edit month"
+                                        >
+                                          <Pencil className="h-3.5 w-3.5" />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => setDeleteConfirmMonth(month)}
+                                          className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                                          aria-label="Delete month"
+                                        >
+                                          <Trash2 className="h-3.5 w-3.5" />
+                                        </button>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  {/* Mobile: card layout */}
+                  <div className="space-y-3 md:hidden">
+                    {Object.entries(entriesByMonth)
+                      .sort(([a], [b]) => a.localeCompare(b))
+                      .map(([month, monthEntries]) => {
+                        const total = monthEntries.reduce((s, e) => s + e.amount, 0)
+                        const isEditing = editingMonth === month
+                        const currency = getCurrencyForCountry(unit.country)
+                        const monthLabel = new Date(month + '-01').toLocaleDateString('en', { month: 'short', year: 'numeric' })
+                        return (
+                          <div
+                            key={month}
+                            className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-900/30"
+                          >
+                            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2.5 dark:border-slate-700">
+                              <span className="font-medium text-foreground">{monthLabel}</span>
+                              <span className="text-sm font-semibold">{formatCurrency(total, currency)}</span>
+                            </div>
+                            <div className="p-4">
+                              {isEditing ? (
+                                <div className="space-y-4">
+                                  <div className="grid gap-3 sm:grid-cols-2">
+                                    {monthEntries.map((e) => {
                                       const cat = EXPENSE_CATEGORIES.find((c) => c.value === e.category)
+                                      const val = editingAmounts[e.id] ?? e.amount
                                       return (
-                                        <span key={e.id} className="flex justify-between text-muted-foreground sm:inline">
-                                          <span className="font-medium text-foreground">{cat?.label}:</span>{' '}
-                                          <span className="tabular-nums sm:inline">{formatCurrency(e.amount, currency)}</span>
-                                        </span>
+                                        <div key={e.id} className="flex items-center gap-2">
+                                          <Label className="w-24 shrink-0 text-xs text-muted-foreground">
+                                            {cat?.label}
+                                          </Label>
+                                          <Input
+                                            type="number"
+                                            min={0}
+                                            step={0.01}
+                                            className="h-9 flex-1 text-sm"
+                                            value={val}
+                                            onChange={(ev) =>
+                                              setEditingAmounts((p) => ({ ...p, [e.id]: parseFloat(ev.target.value) || 0 }))
+                                            }
+                                          />
+                                        </div>
                                       )
                                     })}
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => {
+                                        const updates = monthEntries
+                                          .map((e) => ({ id: e.id, amount: editingAmounts[e.id] ?? e.amount }))
+                                          .filter((u) => u.amount >= 0)
+                                        updateEntriesMutation.mutate(updates, {
+                                          onSuccess: () => {
+                                            setEditingMonth(null)
+                                            setEditingAmounts({})
+                                          },
+                                        })
+                                      }}
+                                      disabled={updateEntriesMutation.isPending}
+                                    >
+                                      {updateEntriesMutation.isPending ? 'Saving...' : 'Save changes'}
+                                    </Button>
+                                    <Button
+                                      variant="secondary"
+                                      size="sm"
+                                      onClick={() => {
+                                        setEditingMonth(null)
+                                        setEditingAmounts({})
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
                                 </div>
-                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1">
-                                  <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    className="h-8 w-full justify-center gap-1.5 px-2.5 text-xs sm:w-auto"
-                                    onClick={() => {
-                                      setEditingMonth(month)
-                                      setEditingAmounts(
-                                        Object.fromEntries(monthEntries.map((e) => [e.id, e.amount]))
-                                      )
-                                    }}
-                                  >
-                                    <Pencil className="h-3.5 w-3.5" />
-                                    Edit
-                                  </Button>
-                                  <button
-                                    type="button"
-                                    onClick={() => setDeleteConfirmMonth(month)}
-                                    className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md px-2.5 text-xs text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 sm:w-auto dark:hover:bg-red-950/30 dark:hover:text-red-400"
-                                    aria-label="Delete month"
-                                  >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                    Delete
-                                  </button>
+                              ) : (
+                                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                                  <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-1 text-sm">
+                                    {monthEntries
+                                      .filter((e) => e.amount > 0)
+                                      .map((e) => {
+                                        const cat = EXPENSE_CATEGORIES.find((c) => c.value === e.category)
+                                        return (
+                                          <span key={e.id} className="flex justify-between text-muted-foreground sm:inline">
+                                            <span className="font-medium text-foreground">{cat?.label}:</span>{' '}
+                                            <span className="tabular-nums sm:inline">{formatCurrency(e.amount, currency)}</span>
+                                          </span>
+                                        )
+                                      })}
+                                  </div>
+                                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1">
+                                    <Button
+                                      variant="secondary"
+                                      size="sm"
+                                      className="h-8 w-full justify-center gap-1.5 px-2.5 text-xs sm:w-auto"
+                                      onClick={() => {
+                                        setEditingMonth(month)
+                                        setEditingAmounts(
+                                          Object.fromEntries(monthEntries.map((e) => [e.id, e.amount]))
+                                        )
+                                      }}
+                                    >
+                                      <Pencil className="h-3.5 w-3.5" />
+                                      Edit
+                                    </Button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setDeleteConfirmMonth(month)}
+                                      className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md px-2.5 text-xs text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 sm:w-auto dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                                      aria-label="Delete month"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                      Delete
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                  </div>
                 </div>
               )}
             </div>
