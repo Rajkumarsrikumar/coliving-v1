@@ -202,23 +202,23 @@ export function MySpendsPage() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card>
-              <CardHeader>
+            <Card className="overflow-hidden shadow-sm">
+              <CardHeader className="border-b border-slate-100 dark:border-slate-800">
                 <CardTitle className="flex items-center gap-2">
-                  <Home className="h-5 w-5" />
+                  <Home className="h-5 w-5 text-coral-500" />
                   By unit
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+              <CardContent className="p-4">
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
                   {summary.map((s) => {
                     const currency = getCurrencyForCountry(s.unit.country)
                     return (
                       <Link key={s.unit.id} to={`/units/${s.unit.id}`}>
-                        <div className="flex items-center gap-3 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:border-slate-800 dark:hover:bg-slate-900/50 sm:rounded-lg">
+                        <div className="flex min-h-[88px] items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all hover:border-slate-300 hover:bg-slate-100/80 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/30 dark:hover:border-slate-600 dark:hover:bg-slate-800/50 sm:min-h-0 md:min-h-[80px]">
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium">{s.unit.name}</p>
-                            <div className="mt-2 flex flex-col gap-1 text-sm sm:mt-1.5 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-0">
+                            <p className="text-base font-semibold text-foreground sm:text-sm md:text-base">{s.unit.name}</p>
+                            <div className="mt-2 flex flex-col gap-1 text-sm sm:mt-1.5 md:flex-row md:flex-wrap md:gap-x-3 md:gap-y-0">
                               <span className="text-muted-foreground">
                                 Paid {formatCurrency(s.myPaid, currency)}
                               </span>
@@ -226,14 +226,14 @@ export function MySpendsPage() {
                                 Share {formatCurrency(s.myOwed, currency)}
                               </span>
                               {s.balance !== 0 && (
-                                <span className={`font-medium ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                                <span className={`font-semibold ${s.balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
                                   {s.balance > 0 ? 'Owed' : 'Owe'} {formatCurrency(Math.abs(s.balance), currency)}
                                 </span>
                               )}
                             </div>
                           </div>
-                          <span className="flex h-11 min-w-[44px] shrink-0 items-center justify-center text-coral-500 sm:h-auto sm:min-w-0">
-                            <span className="text-xl sm:text-base">→</span>
+                          <span className="flex h-10 min-w-[40px] shrink-0 items-center justify-center text-lg text-coral-500 md:min-w-[32px]">
+                            →
                           </span>
                         </div>
                       </Link>

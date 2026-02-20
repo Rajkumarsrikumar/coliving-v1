@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from './hooks/useAuth'
 import { Header } from './components/layout/Header'
+import { BottomNav } from './components/layout/BottomNav'
 import { LoginPage } from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
 import { CreateUnitPage } from './pages/CreateUnitPage'
@@ -47,8 +48,15 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header />
-      <main className="flex flex-1 flex-col">
+      {/* Desktop: fixed top header - hidden on mobile/tablet */}
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+      {/* Mobile/tablet: fixed bottom nav - hidden on desktop */}
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
+      <main className="flex flex-1 flex-col pb-16 pt-4 lg:pb-0 lg:pt-14">
         <div className="mx-auto w-full max-w-6xl flex-1 xl:max-w-7xl">
           <AnimatePresence mode="wait">
             {children}

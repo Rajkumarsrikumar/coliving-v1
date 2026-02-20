@@ -236,7 +236,131 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                 {showEntries ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </button>
               {showEntries && (
-                <div className="mt-2 space-y-1">
+                <div className="mt-3">
+                  {/* Desktop: table view */}
+                  <div className="hidden overflow-x-auto md:block">
+                    <div className="max-h-[480px] overflow-y-auto rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
+                      <table className="w-full min-w-[560px] text-sm">
+                        <thead className="sticky top-0 z-10 border-b-2 border-slate-200 bg-slate-100/95 dark:border-slate-600 dark:bg-slate-800/95">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Date</th>
+                            {EXPENSE_CATEGORIES.map((cat) => (
+                              <th key={cat.value} className="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">{cat.label}</th>
+                            ))}
+                            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-foreground">Total</th>
+                            <th className="w-28 px-3 py-3" aria-label="Actions" />
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(entriesByMonth)
+                            .sort(([a], [b]) => a.localeCompare(b))
+                            .map(([month, monthEntries]) => {
+                              const total = monthEntries.reduce((s, e) => s + e.amount, 0)
+                              const isEditing = editingMonth === month
+                              const currency = getCurrencyForCountry(unit.country)
+                              const monthLabel = new Date(month + '-01').toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' })
+                              const amountByCat = Object.fromEntries(monthEntries.map((e) => [e.category, e.amount]))
+                              return (
+                                <tr
+                                  key={month}
+                                  className={`border-b border-slate-100 last:border-0 dark:border-slate-800 ${isEditing ? 'bg-amber-50/80 dark:bg-amber-950/30' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 even:bg-slate-50/30 dark:even:bg-slate-800/20'}`}
+                                >
+                                  <td className="px-4 py-3 font-medium text-foreground">{monthLabel}</td>
+                                  {EXPENSE_CATEGORIES.map((cat) => {
+                                    const entry = monthEntries.find((e) => e.category === cat.value)
+                                    const amount = amountByCat[cat.value] ?? 0
+                                    return (
+                                      <td key={cat.value} className="px-2 py-3 text-right">
+                                        {isEditing && entry ? (
+                                          <Input
+                                            type="number"
+                                            min={0}
+                                            step={0.01}
+                                            className="h-8 w-20 text-right text-sm"
+                                            value={editingAmounts[entry.id] ?? entry.amount}
+                                            onChange={(ev) =>
+                                              setEditingAmounts((p) => ({ ...p, [entry.id]: parseFloat(ev.target.value) || 0 }))
+                                            }
+                                          />
+                                        ) : (
+                                          <span className="tabular-nums text-muted-foreground">
+                                            {formatCurrency(amount, currency)}
+                                          </span>
+                                        )}
+                                      </td>
+                                    )
+                                  })}
+                                  <td className="px-4 py-3 text-right font-semibold tabular-nums text-foreground">{formatCurrency(total, currency)}</td>
+                                  <td className="px-3 py-3">
+                                    {isEditing ? (
+                                      <div className="flex items-center gap-1">
+                                        <Button
+                                          size="sm"
+                                          className="h-7 px-2 text-xs"
+                                          onClick={() => {
+                                            const updates = monthEntries
+                                              .map((e) => ({ id: e.id, amount: editingAmounts[e.id] ?? e.amount }))
+                                              .filter((u) => u.amount >= 0)
+                                            updateEntriesMutation.mutate(updates, {
+                                              onSuccess: () => {
+                                                setEditingMonth(null)
+                                                setEditingAmounts({})
+                                              },
+                                            })
+                                          }}
+                                          disabled={updateEntriesMutation.isPending}
+                                        >
+                                          Save
+                                        </Button>
+                                        <Button
+                                          variant="secondary"
+                                          size="sm"
+                                          className="h-7 px-2 text-xs"
+                                          onClick={() => {
+                                            setEditingMonth(null)
+                                            setEditingAmounts({})
+                                          }}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-1">
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setEditingMonth(month)
+                                            setEditingAmounts(Object.fromEntries(monthEntries.map((e) => [e.id, e.amount])))
+                                          }}
+                                          className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-slate-200 hover:text-foreground dark:hover:bg-slate-700"
+                                          aria-label="Edit month"
+                                        >
+                                          <Pencil className="h-3.5 w-3.5" />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            if (confirm(`Delete all entries for ${monthLabel}?`)) {
+                                              deleteMonthMutation.mutate(month)
+                                            }
+                                          }}
+                                          className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                                          aria-label="Delete month"
+                                        >
+                                          <Trash2 className="h-3.5 w-3.5" />
+                                        </button>
+                                      </div>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  {/* Mobile: list layout */}
+                  <div className="mt-2 space-y-1 md:hidden">
                   {Object.entries(entriesByMonth)
                     .sort(([a], [b]) => a.localeCompare(b))
                     .map(([month, monthEntries]) => {
@@ -347,6 +471,7 @@ export function ExpectedExpensesCard({ unit }: ExpectedExpensesCardProps) {
                         </div>
                       )
                     })}
+                  </div>
                 </div>
               )}
             </div>

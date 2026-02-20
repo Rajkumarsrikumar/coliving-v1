@@ -86,28 +86,28 @@ export function UnitMembersPage() {
             </CardHeader>
             <CardContent className="p-4">
               {/* Mobile: 1 col | Tablet: 2 cols | Website (narrow card): 1 col */}
-              <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
+              <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                 {members.map((member) => (
                   <div
                     key={member.id}
-                    className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/30 p-4 transition-all hover:border-slate-300 hover:bg-slate-50/60 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/20 dark:hover:border-slate-600 dark:hover:bg-slate-800/40 sm:rounded-lg sm:p-3"
+                    className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-slate-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800/30 dark:hover:border-slate-600 dark:hover:bg-slate-800/50 sm:p-3 md:p-4"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-coral-100 font-medium text-coral-600 dark:bg-coral-900/30 sm:h-10 sm:w-10">
                       {(member.profile?.name || '?')[0]}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="font-medium leading-tight sm:text-base">
+                        <p className="text-base font-semibold leading-tight sm:text-sm md:text-base">
                           {member.profile?.name || 'Unknown'}
                           {member.user_id === user?.id && (
-                            <span className="ml-1.5 text-xs text-muted-foreground">(you)</span>
+                            <span className="ml-1.5 text-xs font-normal text-muted-foreground">(you)</span>
                           )}
                         </p>
                         {isMasterTenant && (
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-9 w-9 shrink-0 p-0 sm:h-8 sm:w-8"
+                            className="h-9 min-w-[36px] shrink-0 p-0"
                             onClick={() => setEditingMember(member)}
                             aria-label="Edit contribution"
                           >
@@ -115,15 +115,14 @@ export function UnitMembersPage() {
                           </Button>
                         )}
                       </div>
-                      <div className="mt-1.5 flex flex-col gap-0.5 text-sm text-muted-foreground sm:mt-1 sm:flex-row sm:flex-wrap sm:gap-x-2 sm:gap-y-0">
+                      <div className="mt-1.5 flex flex-col gap-0.5 text-sm text-muted-foreground sm:mt-1 md:flex-row md:flex-wrap md:items-center md:gap-x-2 md:gap-y-0">
                         <span className="flex items-center gap-1">
                           {(member.role === 'master_tenant' || member.role === 'owner') && <Crown className="h-3.5 w-3.5 shrink-0" />}
                           {member.role === 'master_tenant' || member.role === 'owner' ? 'Master tenant' : 'Co-tenant'}
                         </span>
-                        <span className="hidden text-slate-300 dark:text-slate-600 sm:inline">·</span>
+                        <span className="hidden text-slate-300 dark:text-slate-600 md:inline">·</span>
                         <span className="tabular-nums">
-                          <span className="sm:hidden">{formatMemberContribution(member, getCurrencyForCountry(unit?.country), { short: true })}</span>
-                          <span className="hidden sm:inline">{formatMemberContribution(member, getCurrencyForCountry(unit?.country))}</span>
+                          {formatMemberContribution(member, getCurrencyForCountry(unit?.country), { short: true })}
                         </span>
                       </div>
                     </div>

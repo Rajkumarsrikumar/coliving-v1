@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Moon, Sun } from 'lucide-react'
+import { Moon, Sun } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { LoginForm } from '../features/auth/LoginForm'
@@ -36,11 +36,11 @@ export function LoginPage() {
           className="w-full max-w-md"
         >
           <div className="mb-8 flex flex-col items-center gap-2">
-            <div className="rounded-2xl bg-coral-500 p-3">
-              <Home className="h-10 w-10 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-coral-500">CoTenanty</h1>
-            <p className="text-sm text-muted-foreground">Split expenses, share life</p>
+            <img
+              src="/logo.png"
+              alt="CoTenanty - Co-Living Platform"
+              className="h-36 w-auto object-contain"
+            />
           </div>
           <Card className="border-0 shadow-xl bg-card">
             <CardHeader>

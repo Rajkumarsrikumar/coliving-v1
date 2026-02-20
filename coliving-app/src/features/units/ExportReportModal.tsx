@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FileDown, FileText, Home, X } from 'lucide-react'
+import { FileDown, FileText, X } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { Label } from '../../components/ui/Label'
 import { exportUnitReport, exportUnitReportPDF } from '../../lib/exportUtils'
@@ -40,7 +40,7 @@ export function ExportReportModal({ unit, members, expenses, onClose }: ExportRe
   const selectAllTenants = () => setSelectedTenants(new Set(members.map((m) => m.user_id)))
   const clearAllTenants = () => setSelectedTenants(new Set())
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const reportMembers = filteredMembers.length > 0 ? filteredMembers : members
     const params = {
       unitName: unit.name,
@@ -55,7 +55,7 @@ export function ExportReportModal({ unit, members, expenses, onClose }: ExportRe
       getExpectedAmount,
     }
     if (format === 'pdf') {
-      exportUnitReportPDF(params)
+      await exportUnitReportPDF(params)
     } else {
       exportUnitReport(params)
     }
@@ -83,7 +83,7 @@ export function ExportReportModal({ unit, members, expenses, onClose }: ExportRe
           </button>
         </div>
         <div className="mb-4 flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 dark:border-slate-700 dark:bg-slate-900/50">
-          <Home className="h-5 w-5 shrink-0 text-coral-500" />
+          <img src="/logo-icon.png" alt="" className="h-5 w-5 shrink-0 object-contain" />
           <div>
             <p className="font-medium text-foreground">CoTenanty</p>
             <p className="text-xs text-muted-foreground">

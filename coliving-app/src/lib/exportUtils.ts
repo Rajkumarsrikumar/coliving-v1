@@ -194,7 +194,18 @@ export function exportUnitReport(params: {
   downloadBlob(blob, `report_${safeName}_${year}-${String(month).padStart(2, '0')}.csv`)
 }
 
-export function exportUnitReportPDF(params: {
+async function getLogoBase64(): Promise<string> {
+  const response = await fetch('/logo-icon.png')
+  const blob = await response.blob()
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}
+
+export async function exportUnitReportPDF(params: {
   unitName: string
   month: number
   year: number
@@ -223,20 +234,20 @@ export function exportUnitReportPDF(params: {
   const doc = new jsPDF({ format: 'a4', unit: 'mm' })
   let y = 18
 
-  // CoTenanty header: icon + text + report name
+  // CoTenanty header: logo + text + report name
   const coral = [245, 93, 74] as [number, number, number]
-  doc.setFillColor(...coral)
-  doc.roundedRect(14, y - 5, 8, 8, 1.5, 1.5, 'F')
+  try {
+    const logoBase64 = await getLogoBase64()
+    doc.addImage(logoBase64, 'PNG', 14, y - 5, 10, 10)
+  } catch {
+    doc.setFillColor(...coral)
+    doc.roundedRect(14, y - 5, 8, 8, 1.5, 1.5, 'F')
+  }
   doc.setFontSize(16)
   doc.setTextColor(...coral)
   doc.setFont('helvetica', 'bold')
-  doc.text('CoTenanty', 25, y + 1)
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(10)
-  doc.setTextColor(100, 100, 100)
-  const reportName = `Unit Report — ${unitName} — ${monthLabel} ${year}`
-  doc.text(reportName, 14, y + 8)
-  y += 18
+  doc.text('CoTenanty', 26, y + 1)
+  y += 12
 
   doc.setFontSize(11)
   doc.setTextColor(51, 51, 51)

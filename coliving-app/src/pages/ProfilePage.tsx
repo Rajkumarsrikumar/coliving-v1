@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { User, ImagePlus, X, Phone } from 'lucide-react'
+import { User, ImagePlus, X, Phone, Moon, Sun, LogOut } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { Label } from '../components/ui/Label'
 import { useAuth } from '../hooks/useAuth'
+import { useTheme } from '../hooks/useTheme'
 import { supabase } from '../lib/supabase'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_SIZE_MB = 2
 
 export function ProfilePage() {
-  const { user, profile, updateProfile } = useAuth()
+  const { user, profile, updateProfile, signOut } = useAuth()
+  const { theme, toggle } = useTheme()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [name, setName] = useState(profile?.name || '')
   const [phone, setPhone] = useState(profile?.phone || '')
@@ -218,6 +220,26 @@ export function ProfilePage() {
             </form>
           </CardContent>
         </Card>
+
+        {/* Theme toggle and Sign out - visible on mobile/tablet (no top header) */}
+        <div className="mt-6 flex flex-col gap-2 lg:hidden">
+          <button
+            type="button"
+            onClick={toggle}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
+          <button
+            type="button"
+            onClick={() => signOut()}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-100 dark:border-red-900 dark:bg-red-950/30 dark:text-red-400 dark:hover:bg-red-950/50"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </div>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Logged in as {user?.email}

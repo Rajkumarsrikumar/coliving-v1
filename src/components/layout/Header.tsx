@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Moon, Sun, LogOut, User, Wallet, Home } from 'lucide-react'
+import { Moon, Sun, LogOut, User, Wallet } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '../ui/Button'
 import { useAuth } from '../../hooks/useAuth'
@@ -27,7 +27,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        'flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-card px-4 shadow-sm sm:px-6',
+        'fixed inset-x-0 top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-card/95 px-4 shadow-sm supports-[backdrop-filter]:bg-card/80 sm:px-6 lg:backdrop-blur',
         className
       )}
     >
@@ -36,7 +36,7 @@ export function Header({ className }: HeaderProps) {
         onClick={handleCotenantyClick}
         className="flex min-w-0 shrink items-center gap-2 font-display text-lg font-bold tracking-tight text-coral-500 transition-colors hover:text-coral-600"
       >
-        <Home className="h-6 w-6" />
+        <img src="/logo-icon.png" alt="" className="h-7 w-7 object-contain" />
         CoTenanty
       </Link>
       <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
