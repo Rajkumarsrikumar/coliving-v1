@@ -84,6 +84,7 @@ export function LoginPage() {
                     return { error: error ? { message: error.message } : undefined }
                   }}
                   onSwitchToSignUp={() => setIsLogin(false)}
+                  onForgotPassword={() => navigate('/forgot-password')}
                 />
               ) : (
                 <SignUpForm

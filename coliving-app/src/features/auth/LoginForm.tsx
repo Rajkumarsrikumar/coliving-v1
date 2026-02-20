@@ -16,9 +16,10 @@ type FormData = z.infer<typeof schema>
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<{ error?: { message: string } }>
   onSwitchToSignUp: () => void
+  onForgotPassword?: () => void
 }
 
-export function LoginForm({ onSubmit, onSwitchToSignUp }: LoginFormProps) {
+export function LoginForm({ onSubmit, onSwitchToSignUp, onForgotPassword }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null)
   const {
     register,
@@ -45,7 +46,18 @@ export function LoginForm({ onSubmit, onSwitchToSignUp }: LoginFormProps) {
         {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password">Password</Label>
+          {onForgotPassword && (
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className="text-xs font-medium text-coral-500 hover:underline"
+            >
+              Forgot password?
+            </button>
+          )}
+        </div>
         <Input id="password" type="password" {...register('password')} />
         {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
       </div>

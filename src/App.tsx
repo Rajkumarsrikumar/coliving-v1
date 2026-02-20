@@ -9,6 +9,8 @@ import { Header } from './components/layout/Header'
 import { MobileHeader } from './components/layout/MobileHeader'
 import { BottomNav } from './components/layout/BottomNav'
 import { LoginPage } from './pages/LoginPage'
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { HomePage } from './pages/HomePage'
 import { CreateUnitPage } from './pages/CreateUnitPage'
 import { UnitDashboardPage } from './pages/UnitDashboardPage'
@@ -82,6 +84,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/" element={<LoginPage />} />
           <Route
             path="/home"
