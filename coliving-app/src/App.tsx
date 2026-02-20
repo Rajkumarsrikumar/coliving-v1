@@ -17,6 +17,7 @@ import { ContributionsPage } from './pages/ContributionsPage'
 import { AddContributionPage } from './pages/AddContributionPage'
 import { UnitMembersPage } from './pages/UnitMembersPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { AboutUsPage } from './pages/AboutUsPage'
 import { MySpendsPage } from './pages/MySpendsPage'
 
 const queryClient = new QueryClient({
@@ -189,6 +190,22 @@ function App() {
                   className="flex-1"
                 >
                   <ProfilePage />
+                </motion.div>
+              </ProtectedLayout>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <ProtectedLayout>
+                <motion.div
+                  initial={{ opacity: 0, y: 50, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 26 }}
+                  className="flex-1"
+                >
+                  <AboutUsPage />
                 </motion.div>
               </ProtectedLayout>
             }

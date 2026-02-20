@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Moon, Sun, LogOut, User, Wallet } from 'lucide-react'
+import { Moon, Sun, LogOut, User, Wallet, Info } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button } from '../ui/Button'
 import { useAuth } from '../../hooks/useAuth'
@@ -47,6 +47,14 @@ export function Header({ className }: HeaderProps) {
         >
           <Wallet className="h-5 w-5" />
           <span className="hidden sm:inline">Spends</span>
+        </Link>
+        <Link
+          to="/about"
+          className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800"
+          title="About"
+        >
+          <Info className="h-5 w-5" />
+          <span className="hidden sm:inline">About</span>
         </Link>
         <Link
           to="/profile"

@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, LayoutGroup } from 'framer-motion'
-import { Home, Wallet, User } from 'lucide-react'
+import { Home, Wallet, User, Info } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '../../lib/utils'
 
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/home', icon: Home, label: 'Home' },
   { to: '/spends', icon: Wallet, label: 'Spends' },
   { to: '/profile', icon: User, label: 'Profile' },
+  { to: '/about', icon: Info, label: 'About' },
 ] as const
 
 export function BottomNav() {
