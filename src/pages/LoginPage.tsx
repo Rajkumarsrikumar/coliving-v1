@@ -60,7 +60,7 @@ export function LoginPage() {
             <picture>
               <source
                 type="image/webp"
-                srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+                srcSet="/logo-256.webp 256w, /logo-288.webp 288w, /logo-512.webp 512w"
                 sizes="(max-width: 640px) 144px, 253px"
               />
               <img

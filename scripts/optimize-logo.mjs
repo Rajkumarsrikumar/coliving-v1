@@ -22,8 +22,8 @@ async function optimize() {
   const meta = await input.metadata();
   const { width } = meta;
 
-  // Display size is ~253px, create 1x and 2x for retina
-  const sizes = [256, 512];
+  // Display: mobile 144px, desktop 253px. Create sizes for 1x and 2x.
+  const sizes = [256, 288, 512];
   const displayWidth = Math.min(256, width);
 
   for (const size of sizes) {
