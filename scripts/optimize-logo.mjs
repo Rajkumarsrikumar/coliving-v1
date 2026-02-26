@@ -31,14 +31,14 @@ async function optimize() {
     await input
       .clone()
       .resize(size)
-      .webp({ quality: 85 })
+      .webp({ quality: 75 })
       .toFile(outPath);
     console.log(`Created ${outPath}`);
   }
 
   // Full-size WebP for fallback
   await input
-    .webp({ quality: 85 })
+    .webp({ quality: 75 })
     .toFile(join(publicDir, 'logo.webp'));
   console.log('Created logo.webp');
 }

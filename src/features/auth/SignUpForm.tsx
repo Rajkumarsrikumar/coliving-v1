@@ -76,7 +76,7 @@ export function SignUpForm({ onSubmit, onSwitchToLogin }: SignUpFormProps) {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{' '}
-        <button type="button" onClick={onSwitchToLogin} className="font-medium text-coral-500 hover:underline">
+        <button type="button" onClick={onSwitchToLogin} className="font-medium text-coral-600 hover:text-coral-700 hover:underline">
           Sign in
         </button>
       </p>

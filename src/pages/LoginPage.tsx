@@ -23,6 +23,7 @@ export function LoginPage() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
+      <main className="relative min-h-screen">
       <div className="absolute right-4 top-4 z-10">
         <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">
           {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -110,6 +111,7 @@ export function LoginPage() {
           </motion.div>
         </motion.div>
       </div>
+      </main>
     </div>
   )
 }

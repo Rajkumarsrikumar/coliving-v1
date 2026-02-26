@@ -52,7 +52,7 @@ export function LoginForm({ onSubmit, onSwitchToSignUp, onForgotPassword }: Logi
             <button
               type="button"
               onClick={onForgotPassword}
-              className="text-xs font-medium text-coral-500 hover:underline"
+              className="text-xs font-medium text-coral-600 hover:text-coral-700 hover:underline"
             >
               Forgot password?
             </button>
@@ -66,7 +66,7 @@ export function LoginForm({ onSubmit, onSwitchToSignUp, onForgotPassword }: Logi
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Don't have an account?{' '}
-        <button type="button" onClick={onSwitchToSignUp} className="font-medium text-coral-500 hover:underline">
+        <button type="button" onClick={onSwitchToSignUp} className="font-medium text-coral-600 hover:text-coral-700 hover:underline">
           Sign up
         </button>
       </p>
