@@ -77,7 +77,7 @@ export function ResetPasswordPage() {
         <Link to="/forgot-password">
           <Button>Request new link</Button>
         </Link>
-        <Link to="/login" className="text-sm text-coral-600 hover:text-coral-700 hover:underline">
+        <Link to="/login" className="text-sm text-coral-700 hover:text-coral-800 hover:underline">
           Back to sign in
         </Link>
       </div>

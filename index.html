@@ -20,8 +20,12 @@
     <meta name="theme-color" content="#f55d4a" />
     <meta name="mobile-web-app-capable" content="yes" />
     <title>CoTenanty</title>
+    <style>#lcp-placeholder{background:#fff}@media (prefers-color-scheme:dark){#lcp-placeholder{background:#0f172a}}</style>
   </head>
   <body>
+    <div id="lcp-placeholder" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;z-index:9999">
+      <img src="/logo-256.webp" alt="CoTenanty - Co-Living Platform" width="253" height="252" fetchpriority="high" style="height:9rem;width:auto;object-fit:contain">
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
