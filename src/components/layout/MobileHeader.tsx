@@ -32,7 +32,7 @@ export function MobileHeader() {
         onClick={handleHomeClick}
         className="flex min-w-0 shrink items-center gap-2 font-display text-base font-bold tracking-tight text-coral-500 transition-colors hover:text-coral-600"
       >
-        <img src="/logo-icon.png" alt="" className="h-6 w-6 object-contain" />
+        <img src="/logo-icon.png" alt="" className="h-6 w-6 object-contain" width={24} height={24} />
         <span>CoTenanty</span>
       </Link>
       <div className="flex shrink-0 items-center gap-1">

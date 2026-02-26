@@ -57,11 +57,21 @@ export function LoginPage() {
               },
             }}
           >
-            <img
-              src="/logo.png"
-              alt="CoTenanty - Co-Living Platform"
-              className="h-36 w-auto object-contain drop-shadow-lg"
-            />
+            <picture>
+              <source
+                type="image/webp"
+                srcSet="/logo-256.webp 1x, /logo-512.webp 2x"
+                sizes="(max-width: 640px) 144px, 253px"
+              />
+              <img
+                src="/logo.png"
+                alt="CoTenanty - Co-Living Platform"
+                className="h-36 w-auto object-contain drop-shadow-lg"
+                width={253}
+                height={252}
+                fetchPriority="high"
+              />
+            </picture>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.92 }}

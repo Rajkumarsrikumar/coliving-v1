@@ -36,7 +36,7 @@ export function Header({ className }: HeaderProps) {
         onClick={handleCotenantyClick}
         className="flex min-w-0 shrink items-center gap-2 font-display text-lg font-bold tracking-tight text-coral-500 transition-colors hover:text-coral-600"
       >
-        <img src="/logo-icon.png" alt="" className="h-7 w-7 object-contain" />
+        <img src="/logo-icon.png" alt="" className="h-7 w-7 object-contain" width={28} height={28} />
         CoTenanty
       </Link>
       <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
@@ -65,6 +65,8 @@ export function Header({ className }: HeaderProps) {
               src={profile.avatar_url}
               alt=""
               className="h-7 w-7 rounded-full object-cover"
+              width={28}
+              height={28}
             />
           ) : (
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-coral-100 text-coral-600 dark:bg-coral-900/30 dark:text-coral-400">
