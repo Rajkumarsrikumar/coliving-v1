@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { ThemeProvider } from './components/ThemeProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Analytics } from '@vercel/analytics/react'
 import { useAuth } from './hooks/useAuth'
 import { Header } from './components/layout/Header'
 import { MobileHeader } from './components/layout/MobileHeader'
@@ -241,6 +242,7 @@ function App() {
           />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
+        <Analytics />
       </BrowserRouter>
       <Analytics />
       </ThemeProvider>
