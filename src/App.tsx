@@ -101,6 +101,9 @@ function ProtectedLayout({ children }: { children: React.ReactNode }) {
           </AnimatePresence>
         </div>
       </main>
+      <footer className="hidden border-t border-border py-4 text-center text-xs text-muted-foreground lg:block">
+        Crafted and Owned by Niray IT Solutions
+      </footer>
     </div>
   )
 }
